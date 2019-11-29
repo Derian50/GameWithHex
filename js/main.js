@@ -504,6 +504,7 @@ var meleeMoveOrAttack = function(currentHexX, currentHexY, x, y){
         activeHexY = -1
         createMovePath(currentHexX, currentHexY, x, y, dist)
     }else{
+        units[unitsIndex].active = true
         falseHexX = x
         falseHexY = y
         timerFalseHex = TIMEFALSEHEX
