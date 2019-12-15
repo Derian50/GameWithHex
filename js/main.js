@@ -564,7 +564,7 @@ var whatHexIsClicked2 = function(x, y){
         activeHexY = -1
         return
     }
-    if(isUnitsInThisHex(x,y) && units[whatIsIndex(x,y)].side === yourSide && units[whatIsIndex(x,y)].canMove){
+    if(isUnitsInThisHex(x,y) && units[whatIsIndex(x,y)].side === yourSide && units[whatIsIndex(x,y)].canMove && units[whatIsIndex(x,y)].move === false){
         if(activeHexX !== -1){
             units[whatIsIndex(activeHexX, activeHexY)].active = false
         }
@@ -924,6 +924,11 @@ var renderUnits = function(){
     ctx.fillStyle = '#000000'
     
 }
+var startGame = function(){
+    mainLoop()
+    createArrs()
+    createUnitsArr()
+}
 var mainLoop = function(){
     ctx.clearRect(0, 0, width, height)
     moveAndCheckArrows()
@@ -936,6 +941,4 @@ var mainLoop = function(){
     drawHex()
     requestAnimationFrame(mainLoop)
 }
-mainLoop()
-createArrs()
-createUnitsArr()
+startGame()
