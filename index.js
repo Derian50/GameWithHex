@@ -5,7 +5,7 @@ var io = require('socket.io').listen(server)
 var path = require('path')
 // Отслеживание порта
 server.listen(3000)
-
+var countGames = 0
 // Отслеживание url адреса и отображение нужной HTML страницы
 app.get('/', function(request, respons) {	
 	app.use(express.static(path.join(__dirname, '/public')))
@@ -21,17 +21,43 @@ gamesId = []
 // Массив с информацией о всех объектах
 gamesData = []
 // Массив с инфой о комнатах
-roomsData = [['Derian', 1, 2, '1x1', 'small', '21:22', 'Derian'],['012345678901234', 1, 2, '1x1', 'normal', '21:22', 'SergeyZ'],['НУБЫ СЮДА', 4, 12, 'ffa', 'large', '21:10', 'kot_1111'] ] //[Название, Кол-во игроков, макс кол-во игроков, тип игры, карта, дата создания, хост]
-
+//[Название, Кол-во игроков, макс кол-во игроков, тип игры, карта, дата создания, хост]
+roomsData = [] 
+roomsDataAboutPlayers = []
+roomsDataAboutSockets = []
 // Функция, которая сработает при подключении к странице
 // Считается как новый пользователь
 io.sockets.on('connection', function(socket) {
+	
 	console.log("Успешное соединение")
+	console.log(countGames)
 	// Добавление нового соединения в массив
 	connections.push(socket)
 	socket.emit('loadPage', 'title')
-	socket.emit('setRoomsData', roomsData)
-	
+	socket.on('pageIsLoad', function(){
+		socket.emit('setRoomsData', roomsData, countGames)
+	})
+	socket.on('connectToRoom', function(roomId, name){
+		for(var i = 0; i < roomsData.length; i++){
+			if(roomId == roomsData[i][0]){
+				roomsData[i][2]++
+				roomsDataAboutPlayers[i].push(name)
+				roomsDataAboutSockets[i].push(socket)	
+				io.sockets.emit('setRoomsData', roomsData, countGames)
+			}
+		}
+		console.log('Присоединился тип')
+		console.log(roomsData)
+		console.log(roomsDataAboutPlayers)
+		console.log(roomsDataAboutSockets)
+	})
+	socket.on('createRoom', function(data){
+		countGames++
+		roomsData.push(data)
+		roomsDataAboutPlayers.push([data[0], data[6]])
+		roomsDataAboutSockets.push([data[0], socket]) //data[0] - это айдишник комнаты
+		io.sockets.emit('setRoomsData', roomsData, countGames)
+	})
 	// Функция, которая срабатывает при отключении от сервера
 	socket.on('disconnect', function(data) {
 		// Удаления пользователя из массива

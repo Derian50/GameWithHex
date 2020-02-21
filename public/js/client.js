@@ -1,10 +1,10 @@
 var socket = io.connect();
-roomsData = []
 
-
+/* 
 socket.on('setRoomsData', function(myRoomsData){
     roomsData = myRoomsData.slice()
-})
+    console.log(roomsData)
+}) */
 socket.on('loadPage', function(pageName){
     console.log(pageName)
     include('/js/' + pageName + '.js')
