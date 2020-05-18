@@ -5,6 +5,10 @@ var width = 0,
 cvs.width = width
 cvs.height = height
 
+
+var mainMenu = document.getElementById('mainMenu')
+var lobbyPage = document.getElementById('lobbyPage')
+
 var container = document.getElementById('container')
 var inputName = document.getElementById('inputName')
 var inputMap = document.getElementById('inputMap')
@@ -40,6 +44,181 @@ var table = document.getElementById('table')
 var tbody = document.getElementById('tbody')
 var connectButton = document.getElementById('connectButton')
 
+var leaveButton = document.getElementById('leaveButton')
+var teamDiv = document.getElementById('teamDiv')
+var teamButton = document.getElementById('teamButton')
+
+var colorDiv = document.getElementById('colorDiv')
+var colorButton = document.getElementById('colorButton')
+
+var tbody2 = document.getElementById('tbody2')
+var startGameButton = document.getElementById('startGameButton')
+
+document.onclick = function(e){
+    target = e.target
+    var teamDiv = document.getElementById('teamDiv')
+    var colorDiv = document.getElementById('colorDiv')
+    
+    var teamButton = document.getElementById('teamButton')
+    var buttonColor = document.getElementById('buttonColor')
+    if(teamDiv){
+        
+        var roomId = -1
+        roomId = lobbyesData[0][0]
+        var roomsIndex = -1
+        for(var i = 0; i < roomsData.length; i++){
+            if(roomsData[i][0] == roomId) roomsIndex = i
+        }
+        for(var i = 0; i < 12; i++){
+            if(target == teamDiv.childNodes[i]){
+                if(getCanChangeTeam(e.target.innerHTML, roomsData[roomsIndex], lobbyesData, infoAboutGame[6])){
+                    teamButton.innerHTML = e.target.innerHTML
+                    changeTeam(e.target.innerHTML, lobbyesData, infoAboutGame[6])
+                    socket.emit('updateLobbyesData', roomId, lobbyesData)
+                }
+                
+            }else if(target == colorDiv.childNodes[i]){
+                if(getCanChangeColor(lobbyesData, e.target.attributes.style.value)){
+                    buttonColor.style = e.target.attributes.style.value + '; background-' + e.target.attributes.style.value
+                    for(var j = 0; j < lobbyesData.length; j++){
+                        if(infoAboutGame[6] == lobbyesData[j][2]){
+                            lobbyesData[j][4] = e.target.attributes.style.value
+                            socket.emit('updateLobbyesData', roomId, lobbyesData)
+                        }
+                    }
+                }
+                
+            }
+        }
+    }
+}
+socket.on('startGame', function(){
+    console.log('Начать игру', lobbyesData, roomsData)
+    
+    mainMenu.className = 'row d-none'
+    lobbyPage.className = 'row d-none'
+    
+})
+startGameButton.onclick = function(){
+	socket.emit('startGame', lobbyesData, roomsData)
+    
+}
+var checkStartGame = function(lobbyesInfo, roomsInfo){
+    if(infoAboutGame[6] == roomsInfo[6]){
+            if(roomsInfo[2] == roomsInfo[3]){
+                startGameButton.className = 'btn btn-secondary btn-lg'
+            }else{
+                startGameButton.className = 'btn btn-secondary btn-lg d-none'
+            }
+    }
+}
+var getCanChangeColor = function(lobbyesInfo, color){
+    for(var i = 0; i < lobbyesInfo.length; i++){
+        if(color == lobbyesInfo[i][4]) return false
+    }
+    return true
+}
+
+   
+var getRoomIndex = function(id){
+    for(var i = 0 ; i < roomsData.length; i++){
+        if(roomsData[i][0] == id){
+            return i
+        }
+    }
+}
+var createRandomNick = function(){
+    min = 10000000;
+    max = 99999999;
+    return 'Москит №' + (Math.floor(Math.random() * (max - min)) + min)
+}
+var setTeamsInfo = function(roomId){
+    index = getRoomIndex(roomId)
+    var count = howMuchCanBeTeams(roomsData[index])
+    if(count > 10) count = 10
+    
+    var teamDiv = document.getElementById('teamDiv')
+    for(var i = 0; i < 10; i++){
+        teamDiv.childNodes[i].className = "dropdown-item d-none"
+    }
+    for(var i = 0; i < count; i++){
+        teamDiv.childNodes[i].className = "dropdown-item"
+    }
+}
+var howMuchCanBeTeams = function(roomInfo){
+    switch (roomInfo[4]){
+        case '1x1':
+            return 2
+            break
+        case '2x2':
+            return 2
+            break
+        case '3x3':
+            return 2
+            break
+        case '4x4':
+            return 2
+            break
+        case '2x2x2':
+            return 3
+            break
+        case '2x2x2x2':
+            return 4
+            break
+        case 'FFA':
+            return roomInfo[3]
+            break
+        
+    }
+}
+var howMuchCanBePlayersPerTeam = function(roomInfo){
+    console.log(roomInfo)
+    switch(roomInfo[4]){
+        case '1x1':
+            return 1
+            break
+        case '2x2':
+            return 2
+            break
+        case '3x3':
+            return 3
+            break
+        case '4x4':
+            return 4
+            break
+        case '2x2x2':
+            return 2
+            break
+        case '2x2x2x2':
+            return 2
+            break
+        case 'FFA':
+            return 1
+            break
+    }
+}
+var changeTeam = function(newTeam, lobbyesInfo, nickname){
+    for(var i = 0; i < lobbyesInfo.length; i++){
+        if(nickname == lobbyesInfo[i][2]){
+            lobbyesData[i][3] = newTeam
+        }
+    }
+    
+}
+var getCanChangeTeam = function(currentTeam, roomInfo, lobbyesInfo, nickname){
+    var playerPerTeam = howMuchCanBePlayersPerTeam(roomInfo)
+   // var currentTeam = -1
+    var countOfCurrentTeam = 0
+    for(var i = 0; i < lobbyesInfo.length; i++){
+        if(lobbyesInfo[i][3] == currentTeam) countOfCurrentTeam++
+    }
+    if(countOfCurrentTeam < playerPerTeam){
+        return true
+    }else{
+        return false
+    }
+
+}
 var infoAboutGame = {
     id: 0,
     name: inputMap.value,
@@ -49,21 +228,30 @@ var infoAboutGame = {
     mapSize: 'Duel',
     host: inputName.value
 }
+inputName.value = createRandomNick()
 var currentRoomsTable = []
 var countGames = 0
 var roomsData = []
-
+var lobbyesData = [] //
+//[айдишник комнаты, хост или нет, имя, команда, цвет]
 var selectedRoomId = 0
 
 socket.emit('pageIsLoad')
 socket.on('setRoomsData', function(myRoomsData, gamesCount){
-    countGames = gamesCount
     
-    infoAboutGame.id = countGames
+    countGames = gamesCount
+    infoAboutGame.id = countGames-1
     roomsData = myRoomsData.slice()
+   /*  for(var i = 0; i < roomsData.length; i++){
+        console.log(lobbyesData, roomsData)
+        if(lobbyesData[0][0] == roomsData[i][0]){
+            checkStartGame(lobbyesData, roomsData)
+        }
+    } */
     createTable()
     createIdTable()
     createSpectrator()
+    
 })
 
 
@@ -89,28 +277,53 @@ var getCanICoonnectToThisRoom = function(id){
 var createSpectrator = function(){
 
     for(var i = 0; i < currentRoomsTable.length; i++){
+       /*  currentRoomsTable[i].style = ' ' */
         currentRoomsTable[i].onclick = function(e){
-            roomId = e.path[1].id
+            for(var j = 0; j < currentRoomsTable.length; j++){
+                currentRoomsTable[j].style = 'background-color: rgb(255, 255, 255);'
+
+            }
+            document.getElementById(e.target.parentNode.id).style = 'background-color: rgba(0, 0, 0, 0.15);'
+            roomId = e.target.parentNode.id
             selectedRoomId = roomId
         }
     }
     
 }
-/* 
-currentRoomsTable[0].onclick = function(){
-    console.log('Ты кликнул на меня,')
-} */
-//Отслеживать нажатия на кнопочки
-//Очень много отслеживать(
 if(localStorage.getItem('name')){
-    inputName.value = localStorage.getItem('name')
-}
-connectButton.onclick = function(){
-    if(getCanICoonnectToThisRoom(selectedRoomId)){
-        socket.emit('connectToRoom', selectedRoomId, inputName.value)
-        console.log('Типа присоединился')
+    if(localStorage.getItem('name')){
+        inputName.value = localStorage.getItem('name')
+    }else{
+        inputName.value = createRandomNick()
     }
+    
 }
+leaveButton.onclick = function(){
+    infoAboutGame.id = selectedRoomId
+    console.log(infoAboutGame.id)
+    socket.emit('playerLeave', infoAboutGame.id)
+    infoAboutGame = {
+        id: 0,
+        name: inputMap.value,
+        currentPlayersCount: 1,
+        playersCount: 2,
+        gameType: '1x1',
+        mapSize: 'Duel',
+        host: inputName.value
+    }
+    
+    tbody2.innerHTML = ''
+    playersCount.innerHTML = '2'
+    mapType.innerHTML = '1x1'
+    mapSize.innerHTML = 'Duel'
+    blockPlayersCount.className = 'row d-none'
+    inputMap.value = ''
+    infoAboutGame.playersCount = 2
+    socket.emit('pageIsLoad')
+    mainMenu.className = 'row'
+    lobbyPage.className = 'row d-none'
+}
+
 saveName.onclick = function(){
     localStorage.clear()
     localStorage.setItem('name', inputName.value)
@@ -308,7 +521,94 @@ var showPlayersCount = function(maxPlayersCount){
     }
 }
 
+var createLobbyTable = function(lobbyesInfo){
+    
+    tbody2.innerHTML = ''
+    playerIndex = -1
+    for(var i = 0; i < lobbyesInfo.length; i++){
+        if(infoAboutGame[6] == lobbyesInfo[i][2]) playerIndex = lobbyesInfo[i][1]
+    }
+    for(var i = 0; i < lobbyesInfo.length; i++){
+        
+		var arrColor = ['color: blue;',
+		'color: red;',
+		'color: yellow;',
+		'color: aqua;',
+		'color: indigo;',
+		'color: orange;',
+		'color: green;',
+		'color: hotpink;',
+		'color: silver;',
+		'color: LightSteelBlue;',
+		'color: DarkGreen;',
+		'color: saddlebrown;']
+        var tr = document.createElement('tr')
+        var td1 = document.createElement('td')
+        td1.innerHTML = lobbyesInfo[i][2]
+        var td2 = document.createElement('td')
+        var td3 = document.createElement('td')
+        var divButtonColor = document.createElement('div')
+        divButtonColor.className = "dropdown"
+        var buttonColor = document.createElement('button')
 
+        buttonColor.innerHTML = '█████████'
+        buttonColor.style = lobbyesInfo[i][4] + '; background-' + lobbyesInfo[i][4]
+        buttonColor.className = "border-0 dropdown-toggle "
+        buttonColor.type = "button"
+        buttonColor.setAttribute('disabled', true)
+        buttonColor.setAttribute('data-toggle', "dropdown") 
+        buttonColor.setAttribute('aria-haspopup', "false")
+        buttonColor.setAttribute('aria-expanded', "true")
+        if(lobbyesInfo[i][1] == playerIndex){
+            buttonColor.id = 'buttonColor'
+            var divButtonTeam = document.createElement('div')
+            divButtonTeam.className = "dropdown"
+            var buttonTeam = document.createElement('button')
+            buttonTeam.innerHTML = lobbyesData[i][3]
+            buttonTeam.id = 'teamButton'
+            buttonTeam.className = "btn-secondary dropdown-toggle"
+            buttonTeam.type = "button"
+            buttonTeam.setAttribute('data-toggle', "dropdown") 
+            buttonTeam.setAttribute('aria-haspopup', "false")
+            buttonTeam.setAttribute('aria-expanded', "true")
+            divButtonTeam.append(buttonTeam)
+            var teamDiv = document.createElement('div')
+            teamDiv.id = 'teamDiv'
+            teamDiv.className = 'dropdown-menu'
+            for(var j = 1; j < 11; j++){
+                var a = document.createElement('a')
+                a.className = 'dropdown-item'
+                a.innerHTML = j
+                teamDiv.append(a)
+            }
+            divButtonTeam.append(teamDiv)
+            td2.append(divButtonTeam)
+            var colorDiv = document.createElement('div')
+            
+            colorDiv.id = 'colorDiv'
+            colorDiv.className = 'dropdown-menu'
+            divButtonColor.append(buttonColor)
+            for(var j = 0; j < 12; j++){
+                var a = document.createElement('a')
+                a.innerHTML = '█████████ '
+                a.className = "dropdown-item "
+                a.style = arrColor[j]
+                colorDiv.append(a)
+            }
+            buttonColor.removeAttribute('disabled')
+            divButtonColor.append(colorDiv)
+        }else{   
+            divButtonColor.append(buttonColor)
+            td2.innerHTML = lobbyesInfo[i][3]
+        }
+        tr.append(td1)
+        tr.append(td2)
+        td3.append(divButtonColor)
+        tr.append(td3)
+        tbody2.append(tr)
+    }
+    
+}
 var createTable = function(){
     tbody.innerHTML = ''
     for(var i = 0; i < roomsData.length; i++){
@@ -327,6 +627,27 @@ var createTable = function(){
         tbody.append(tr)
     }
 }
+connectButton.onclick = function(){
+    if(getCanICoonnectToThisRoom(selectedRoomId)){
+        console.log(infoAboutGame.id)
+        infoAboutGame = Object.values(infoAboutGame)
+        //infoAboutGame[0]++
+        infoAboutGame[6] = inputName.value
+        infoAboutGame.id = selectedRoomId
+        console.log(infoAboutGame.id)
+        freeTeamNumber = getFreeTeamNumber(selectedRoomId)
+        socket.emit('connectToRoom', selectedRoomId, infoAboutGame)
+        socket.emit('getLobbyesData', selectedRoomId)
+        
+        mainMenu.className = 'row d-none'
+        lobbyPage.className = 'row'
+
+       // setTeamsInfo(selectedRoomId)
+        createLobby()
+    }
+}
+var getFreeTeamNumber = function(selectedRoomId){
+}
 
 var makeGame = function(){
     
@@ -337,7 +658,39 @@ var makeGame = function(){
         infoAboutGame.host = infoAboutGame.host.slice(0, 16)
     }
     
-    console.log('Типа создал страницу')
     infoAboutGame = Object.values(infoAboutGame)
+    /* if(infoAboutGame.length > 7){
+        infoAboutGame.splice(1,6)
+    } */
+    infoAboutGame[0]++
     socket.emit('createRoom', infoAboutGame)
+    socket.emit('getLobbyesData', infoAboutGame[0])
+    mainMenu.className = 'row d-none'
+    lobbyPage.className = 'row'
+   // setTeamsInfo(infoAboutGame[0])
+    createLobby()
+}
+
+var dataAboutPlayers = []
+socket.on('setDataAboutPlayers', function(data){
+    dataAboutPlayers = data
+})
+socket.on('setLobbyesData', function(data){
+    lobbyesData = data
+    createLobbyTable(lobbyesData)
+    setTeamsInfo(infoAboutGame[0])
+    for(var i = 0; i < roomsData.length; i++){
+        if(lobbyesData[0][0] == roomsData[i][0]){
+            checkStartGame(lobbyesData, roomsData[i])
+        }
+    }
+    
+})
+var createLobby = function(){
+    socket.emit('getDataAboutPlayers', infoAboutGame[0])
+    
+   // createTable2()
+}
+var switchColor = function(roomId, playerNumber){
+
 }
