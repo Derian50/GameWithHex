@@ -1,9 +1,11 @@
+"use strict"
 var express = require('express')
 var app = express()
 var server = require('http').createServer(app)
 var io = require('socket.io').listen(server)
 var path = require('path')
 var fs = require('fs')
+const { strict } = require('assert')
 // Отслеживание порта
 server.listen(3000)
 var countGames = 0
