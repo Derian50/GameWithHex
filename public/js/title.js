@@ -146,6 +146,7 @@ var setTeamsInfo = function(roomId){
     }
 }
 var howMuchCanBeTeams = function(roomInfo){
+    console.log(roomInfo)
     switch (roomInfo[4]){
         case '1x1':
             return 2

@@ -6,14 +6,6 @@ var width = 1600,
 cvs.width = width
 cvs.height = height
 
-var menucvs = document.getElementById('menuCanvas')
-var menuctx = menucvs.getContext('2d')
-menucvs.width = width
-menucvs.height = 84
-
-var canBuildHex = new Image()
-canBuildHex.src = 'assets/canBuildHex.png'
-
 var emptyHex = new Image()
 emptyHex.src = 'assets/emptyHex.png'
 
@@ -42,171 +34,169 @@ var waterHex = new Image()
 waterHex.src = 'assets/waterHex.png'
 
 
-var wantToBuildStructure = false
-var whatBuildStructure = ''
-var buildStructureHexX = null
-var buildStructureHexY = null
 
-var wantToBuildUnit = false
-var whatBuildUnit = ''
-var buildUnitHexX = null
-var buildUnitHexY = null
-
-var currentMouseX = 0
-var currentMouseY = 0
-var wood = 100
-var food = 100
-var gold = 100
-var canMakeBuild = []
-var canMakeUnit = []
-var yourSide = 'Red'
+var yourSide = 'Blue'
 var typeHex = []
 var hexArr = null
 var unitsArr = []
 var buildsArr = []
 var HEXWIDTH = 50
 var HEXHEIGHT = 20
-var TOPMENUSIZE = 64
 var activeHexX = -1, activeHexY = -1, activeType = null
 var falseHexX = -1, falseHexY = -1, timerFalseHex = -1
 var TIMEFALSEHEX = 5
 var mapEditor = false
 var currentEditorColor = 'rgb(147, 200, 83)'
 var currentEditorColorName = 'plain'
-var startXforBlue = 5
-var startYforBlue = 15
-var startXforRed = 40
-var startYforRed = 2
-var blueIsVirgin = true
-var redIsVirgin = true
-
 var arrows = [
 
 ]
 var builds = [
-    // {
-    //     id: 0,
-    //     type: 'C',
-    //     side: 'Blue',
-    //     active: false,
-    //     color: '#808080',
-    //     speed: 1,
-    //     x: 222,
-    //     y: 222,
-    //     hexX: 2,
-    //     hexY: 6,
-    //     makeUnit: false,
-    //     makeUnitType: null,
-    //     makeUnitTimeToEnd: null,
-    //     range: 3,
-    //     inCooldown: false,
-    //     cooldownAttack: null,
-    //     canAttack: true
-    // },
-    // {
-    //     id: 0,
-    //     type: 'C',
-    //     side: 'Blue',
-    //     active: false,
-    //     color: '#808080',
-    //     x: 222,
-    //     y: 222,
-    //     speed: 1,
-    //     hexX: 21,
-    //     hexY: 5,
-    //     makeUnit: false,
-    //     makeUnitType: null,
-    //     makeUnitTimeToEnd: null,
-    //     range: 3,
-    //     cooldownAttack: null,
-    //     canAttack: true
-    // },
-    // {
-    //     id: 0,
-    //     type: 'B',
-    //     side: 'Blue',
-    //     active: false,
-    //     color: '#808080',
-    //     x: 222,
-    //     y: 222,
-    //     speed: 1,
-    //     hexX: 10,
-    //     hexY: 4,
-    //     makeUnit: false,
-    //     makeUnitType: null,
-    //     makeUnitTimeToEnd: null,
-    //     range: 3,
-    //     cooldownAttack: null,
-    //     canAttack: true
-    // },
-    // {
-    //     id: 0,
-    //     type: 'R',
-    //     side: 'Blue',
-    //     active: false,
-    //     color: '#808080',
-    //     x: 222,
-    //     y: 222,
-    //     speed: 1,
-    //     hexX: 12,
-    //     hexY: 4,
-    //     makeUnit: false,
-    //     makeUnitType: null,
-    //     makeUnitTimeToEnd: null,
-    //     range: 3,
-    //     cooldownAttack: null,
-    //     canAttack: true
-    // },
-    // {
-    //     id: 0,
-    //     type: 'S',
-    //     side: 'Blue',
-    //     active: false,
-    //     color: '#808080',
-    //     x: 222,
-    //     y: 222,
-    //     speed: 1,
-    //     hexX: 14,
-    //     hexY: 4,
-    //     makeUnit: false,
-    //     makeUnitType: null,
-    //     makeUnitTimeToEnd: null,
-    //     range: 3,
-    //     cooldownAttack: null,
-    //     canAttack: true
-    // },
-    // {
-    //     id: 0,
-    //     type: 'H',
-    //     side: 'Blue',
-    //     active: false,
-    //     color: '#808080',
-    //     x: 222,
-    //     y: 222,
-    //     speed: 1,
-    //     hexX: 16,
-    //     hexY: 4,
-    //     makeUnit: false,
-    //     makeUnitType: null,
-    //     makeUnitTimeToEnd: null,
-    //     range: 3,
-    //     cooldownAttack: null,
-    //     canAttack: true
-    // }
+    {
+        id: 0,
+        type: 'Castle',
+        side: 'Blue',
+        active: false,
+        color: '#808080',
+        speed: 1,
+        x: 222,
+        y: 222,
+        hexX: 2,
+        hexY: 6,
+        makeUnit: false,
+        makeUnitType: null,
+        makeUnitTimeToEnd: null,
+        range: 3,
+        inCooldown: false,
+        cooldownAttack: null,
+        canAttack: true
+    },
+    {
+        id: 0,
+        type: 'Castle',
+        side: 'Blue',
+        active: false,
+        color: '#808080',
+        x: 222,
+        y: 222,
+        speed: 1,
+        hexX: 21,
+        hexY: 5,
+        makeUnit: false,
+        makeUnitType: null,
+        makeUnitTimeToEnd: null,
+        range: 3,
+        cooldownAttack: null,
+        canAttack: true
+    },
+    {
+        id: 0,
+        type: 'Barrack',
+        side: 'Blue',
+        active: false,
+        color: '#808080',
+        x: 222,
+        y: 222,
+        speed: 1,
+        hexX: 10,
+        hexY: 4,
+        makeUnit: false,
+        makeUnitType: null,
+        makeUnitTimeToEnd: null,
+        range: 3,
+        cooldownAttack: null,
+        canAttack: true
+    },
+    {
+        id: 0,
+        type: 'RifleRange',
+        side: 'Blue',
+        active: false,
+        color: '#808080',
+        x: 222,
+        y: 222,
+        speed: 1,
+        hexX: 12,
+        hexY: 4,
+        makeUnit: false,
+        makeUnitType: null,
+        makeUnitTimeToEnd: null,
+        range: 3,
+        cooldownAttack: null,
+        canAttack: true
+    },
+    {
+        id: 0,
+        type: 'Stable',
+        side: 'Blue',
+        active: false,
+        color: '#808080',
+        x: 222,
+        y: 222,
+        speed: 1,
+        hexX: 14,
+        hexY: 4,
+        makeUnit: false,
+        makeUnitType: null,
+        makeUnitTimeToEnd: null,
+        range: 3,
+        cooldownAttack: null,
+        canAttack: true
+    },
+    {
+        id: 0,
+        type: 'House',
+        side: 'Blue',
+        active: false,
+        color: '#808080',
+        x: 222,
+        y: 222,
+        speed: 1,
+        hexX: 16,
+        hexY: 4,
+        makeUnit: false,
+        makeUnitType: null,
+        makeUnitTimeToEnd: null,
+        range: 3,
+        cooldownAttack: null,
+        canAttack: true
+    }
 
 ]
 var units = [
     {
         id: 0,
-        type: 'W',
+        type: 'Worker',
         speed: 2,
-        range: 0,
         color: '#4671D5',
         active: false,
-        x: startXforBlue*32+32,
-        y: startYforBlue*48+32,
-        hexX: startXforBlue,
-        hexY: startYforBlue,
+        x: 64,
+        y: 48*3+32,
+        hexX: 21,
+        hexY: 7,
+        finalHexX: 1,
+        finalHexY: 3,
+        move: false,
+        direction: 'down-right',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Blue',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null
+    },
+    {
+        id: 0,
+        type: 'Cavalery',
+        speed: 4,
+        color: '#4671D5',
+        active: false,
+        x: 64,
+        y: 48*3+32,
+        hexX: 9,
+        hexY: 1,
         finalHexX: 1,
         finalHexY: 3,
         move: false,
@@ -218,24 +208,315 @@ var units = [
         side: 'Blue',
         inCooldown: false,
         canMove: true,
-        cooldown: null,
-        progressRes: 0
+        cooldown: null
     },
     {
         id: 1,
-        type: 'W',
-        speed: 2,
-        range: 0,
-        color: '#4671D5',
+        type: 'Cavalery',
+        speed: 4,
+        color: '#CD0074',
         active: false,
-        x: startXforRed*32+32,
-        y: startYforRed*48+32,
-        hexX: startXforRed,
-        hexY: startYforRed,
-        finalHexX: 1,
+        x: 4*32+32,
+        y: 48*2+32,
+        hexX: 11,
+        hexY: 1,
+        finalHexX: 4,
+        finalHexY: 2,
+        move: false,
+        direction: 'right',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Blue',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null
+    },
+    {
+        id: 2,
+        type: 'Cavalery',
+        speed: 4,
+        color: '#CD0074',
+        active: false,
+        x: 32*8+32,
+        y: 48*2+32,
+        hexX: 13,
+        hexY: 1,
+        finalHexX: 8,
+        finalHexY: 2,
+        move: false,
+        direction: 'left',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Blue',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null
+    },
+    {
+        id: 3,
+        type: 'Cavalery',
+        speed: 4,
+        color: '#CD0074',
+        active: false,
+        x: 2*32+32,
+        y: 48*0+32,
+        hexX: 15,
+        hexY: 1,
+        finalHexX: 2,
+        finalHexY: 0,
+        move: false,
+        direction: 'down',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Blue',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null
+    },
+    {
+        id: 4,
+        type: 'Archer',
+        speed: 2,
+        range: 2,
+        color: '#3914AF',
+        active: false,
+        x: 4*32+32,
+        y: 48*0+32,
+        hexX: 10,
+        hexY: 0,
+        finalHexX: 4,
+        finalHexY: 0,
+        move: false,
+        direction: 'down',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Blue',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null,
+        haveArrow: false
+    },
+    {
+        id: 5,
+        type: 'Archer',
+        speed: 2,
+        range: 2,
+        color: '#3914AF',
+        active: false,
+        x: 4*32+32,
+        y: 48*0+32,
+        hexX: 12,
+        hexY: 0,
+        finalHexX: 4,
+        finalHexY: 0,
+        move: false,
+        direction: 'down',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Blue',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null,
+        haveArrow: false
+    },
+    {
+        id: 6,
+        type: 'Archer',
+        speed: 2,
+        range: 2,
+        color: '#3914AF',
+        active: false,
+        x: 4*32+32,
+        y: 48*0+32,
+        hexX: 14,
+        hexY: 0,
+        finalHexX: 4,
+        finalHexY: 0,
+        move: false,
+        direction: 'down',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Blue',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null,
+        haveArrow: false
+    },
+    {
+        id: 6,
+        type: 'Archer',
+        speed: 2,
+        range: 2,
+        color: '#3914AF',
+        active: false,
+        x: 4*32+32,
+        y: 48*0+32,
+        hexX: 16,
+        hexY: 0,
+        finalHexX: 4,
+        finalHexY: 0,
+        move: false,
+        direction: 'down',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Blue',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null,
+        haveArrow: false
+    },
+    {
+        id: 6,
+        type: 'Scout',
+        speed: 3,
+        color: '#0A61B3',
+        active: false,
+        x: 0*32+32,
+        y: 48*0+32,
+        hexX: 16,
+        hexY: 12,
+        finalHexX: 0,
+        finalHexY: 0,
+        move: false,
+        direction: 'down',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Blue',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null,
+        haveArrow: false
+    },
+    {
+        id: 6,
+        type: 'Spear',
+        speed: 2,
+        color: '#0A61B3',
+        active: false,
+        x: 0*32+32,
+        y: 48*0+32,
+        hexX: 4,
+        hexY: 4,
+        finalHexX: 0,
+        finalHexY: 0,
+        move: false,
+        direction: 'down',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Blue',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null,
+        haveArrow: false
+    },
+    {
+        id: 6,
+        type: 'Skirmisher',
+        speed: 2,
+        range: 3,
+        color: '#0A61B3',
+        active: false,
+        x: 0*32+32,
+        y: 48*0+32,
+        hexX: 2,
+        hexY: 4,
+        finalHexX: 0,
+        finalHexY: 0,
+        move: false,
+        direction: 'down',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Blue',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null,
+        haveArrow: false
+    },
+    {
+        id: 6,
+        type: 'Dragoon',
+        speed: 4,
+        range: 3,
+        color: '#0A61B3',
+        active: false,
+        x: 0*32+32,
+        y: 48*0+32,
+        hexX: 6,
+        hexY: 4,
+        finalHexX: 0,
+        finalHexY: 0,
+        move: false,
+        direction: 'down',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Blue',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null,
+        haveArrow: false
+    },
+    {
+        id: 6,
+        type: 'Archer',
+        speed: 2,
+        range: 2,
+        color: '#3914AF',
+        active: false,
+        x: 4*32+32,
+        y: 48*0+32,
+        hexX: 8,
+        hexY: 0,
+        finalHexX: 4,
+        finalHexY: 0,
+        move: false,
+        direction: 'down',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Blue',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null,
+        haveArrow: false
+    },
+    {
+        id: 7,
+        type: 'Archer',
+        speed: 2,
+        range: 2,
+        color: '#FF14AF',
+        active: false,
+        x: 5*32+32,
+        y: 48*3+32,
+        hexX: 14,
+        hexY: 8,
+        finalHexX: 5,
         finalHexY: 3,
         move: false,
-        direction: 'down-left',
+        direction: 'down',
         stepToX: [],
         stepToY: [],
         globalToX: null,
@@ -244,45 +525,285 @@ var units = [
         inCooldown: false,
         canMove: true,
         cooldown: null,
-        progressRes: 0
-    }
+        haveArrow: false
+    },
+    {
+        id: 9,
+        type: 'Archer',
+        speed: 2,
+        range: 2,
+        color: '#FF14AF',
+        active: false,
+        x: 5*32+32,
+        y: 48*3+32,
+        hexX: 10,
+        hexY: 8,
+        finalHexX: 5,
+        finalHexY: 3,
+        move: false,
+        direction: 'down',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Red',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null,
+        haveArrow: false
+    },
+    {
+        id: 9,
+        type: 'Archer',
+        speed: 2,
+        range: 2,
+        color: '#FF14AF',
+        active: false,
+        x: 5*32+32,
+        y: 48*3+32,
+        hexX: 12,
+        hexY: 8,
+        finalHexX: 5,
+        finalHexY: 3,
+        move: false,
+        direction: 'down',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Red',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null,
+        haveArrow: false
+    },
+    {
+        id: 3,
+        type: 'Cavalery',
+        speed: 4,
+        color: '#CD0074',
+        active: false,
+        x: 2*32+32,
+        y: 48*0+32,
+        hexX: 7,
+        hexY: 7,
+        finalHexX: 2,
+        finalHexY: 0,
+        move: false,
+        direction: 'down',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Red',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null
+    },
+    {
+        id: 3,
+        type: 'Cavalery',
+        speed: 4,
+        color: '#CD0074',
+        active: false,
+        x: 2*32+32,
+        y: 48*0+32,
+        hexX: 3,
+        hexY: 7,
+        finalHexX: 2,
+        finalHexY: 0,
+        move: false,
+        direction: 'down',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Red',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null
+    },
+    {
+        id: 3,
+        type: 'Cavalery',
+        speed: 4,
+        color: '#CD0074',
+        active: false,
+        x: 2*32+32,
+        y: 48*0+32,
+        hexX: 4,
+        hexY: 6,
+        finalHexX: 2,
+        finalHexY: 0,
+        move: false,
+        direction: 'down',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Red',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null
+    },
+    {
+        id: 3,
+        type: 'Cavalery',
+        speed: 4,
+        color: '#CD0074',
+        active: false,
+        x: 2*32+32,
+        y: 48*0+32,
+        hexX: 19,
+        hexY: 7,
+        finalHexX: 2,
+        finalHexY: 0,
+        move: false,
+        direction: 'down',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Red',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null
+    },
+    {
+        id: 3,
+        type: 'Cavalery',
+        speed: 4,
+        color: '#CD0074',
+        active: false,
+        x: 2*32+32,
+        y: 48*0+32,
+        hexX: 17,
+        hexY: 7,
+        finalHexX: 2,
+        finalHexY: 0,
+        move: false,
+        direction: 'down',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Red',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null
+    },
+    {
+        id: 3,
+        type: 'Cavalery',
+        speed: 4,
+        color: '#CD0074',
+        active: false,
+        x: 2*32+32,
+        y: 48*0+32,
+        hexX: 20,
+        hexY: 6,
+        finalHexX: 2,
+        finalHexY: 0,
+        move: false,
+        direction: 'down',
+        stepToX: [],
+        stepToY: [],
+        globalToX: null,
+        globalToY: null,
+        side: 'Red',
+        inCooldown: false,
+        canMove: true,
+        cooldown: null
+    },
     
 ]
+/* var createHexArrs = function(){
+    for(var i = 0; i < HEXWIDTH; i++){
+        hexArr[i] = []
+        for(var j = 0; j < HEXWIDTH; j++){
+            if((i%2) === (j%2)){ //чёт-чёту, нечёт-нечёту
 
-
-var gameStart = 0
+                hexArr[i][j] = {
+                    groundType: '', //равнина, лес, холм, горы, вода
+                    haveRiver: false,
+                    visible: false
+                }
+            }
+        }
+    }
+} */
 socket.emit('getMapInfo')
 socket.on('setMapInfo', function(newHexArr){
     console.log('Я получил данные о хексах')
     hexArr = newHexArr
-    gameStart++
-    if(gameStart >= 2) startGame()
+    startGame()
 })
-
-socket.emit('getSide')
-socket.on('setSide', function(data){
-    console.log('SIDE — ', yourSide)
-    console.log(data)
-    switch(data){
-        case 0:
-            yourSide = 'Blue'
-            break
-        case 1:
-            yourSide = 'Red'
-            break
-            
+var secondUpdateVisible = function(){
+    for(var i = 0; i < HEXWIDTH; i++){
+        for(var j = 0; j < HEXHEIGHT; j++){
+            if((i%2) == (j%2)){
+                if(mapEditor){
+                    hexArr[i][j].visible = true
+                }else{
+                    hexArr[i][j].visible = false
+                }
+            }
+        }
     }
-    console.log('SIDE — ', yourSide)
-    gameStart++
-    if(gameStart >= 2) startGame()
-})
-socket.on('sentInfoAboutGame', function(data){
-    console.log('Получаю инфу об игре')
-    units = data[1]
-    builds = data[2]
-    arrows = data[3]
-})
-var updateVisible = function(){
+    
+    for(var i = 9; i < 10; i++){
+        visibleDist = 2
+        if(units[i].side != yourSide) continue
+        if(hexArr[units[i].hexX][units[i].hexY].groundType == 'hill') visibleDist = 3
+        for(var k = 0; k < 12; k++){
+            for(var z = 0; z < 7; z++){
+                tempHexX = units[i].hexX-6+k
+                tempHexY = units[i].hexY-3+z
+                deltaX = 2 * (tempHexX-units[i].hexX)
+                deltaY = 3 * (tempHexY-units[i].hexY)
+                dist = checkDist(units[i].hexX, units[i].hexY, tempHexX, tempHexY)
+                tempArr = []
+                tempX = units[i].x
+                tempY = units[i].y
+                if(tempHexX < 0 || tempHexY < 0 || tempHexX > HEXWIDTH || tempHexY > HEXHEIGHT || ((tempHexX+tempHexY)%2 != 0) ||  (dist > visibleDist)) continue
+                for(var c = 0; c < 16; c++){
+                    tempX += deltaX
+                    tempY += deltaY
+                    XY = whatHexIsClicked(tempX, tempY)
+                    if((XY[0] + XY[1]) % 2 === 1) XY[0]--
+                    if(tempArr[tempArr.length-2] == XY[0] && tempArr[tempArr.length-1] == XY[1]) continue
+                    tempArr.push(XY[0])
+                    tempArr.push(XY[1])
+                    
+                }
+                for(var m = 0; m < (tempArr.length/2)-1; m++){
+                    b = m*2
+                    if((tempArr[b] == tempArr[b+2]) && (tempArr[b+1] == tempArr[b+3])){
+                        tempArr.shift()
+                        tempArr.shift()
+                        m--
+                    }
+                }
+                console.log(tempArr)
+                hexArr[units[i].hexX-6+k][units[i].hexY-3+z].visible = true
+                for(var m = 0; m < (tempArr.length/2)-1; m++){
+                    b = m*2
+                    if(hexArr[tempArr[b]][tempArr[b+1]].groundType == 'mountain'){
+                        console.log("Есть преграда по пути, координаты: ", tempArr[b],tempArr[b+1])
+                        hexArr[units[i].hexX-6+k][units[i].hexY-3+z].visible = false
+                    }else if(hexArr[tempArr[b]][tempArr[b+1]].groundType == 'forest' || hexArr[tempArr[b]][tempArr[b+1]].groundType == 'hill'){
+                        if(visibleDist == 2){
+                            hexArr[units[i].hexX-6+k][units[i].hexY-3+z].visible = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+}
+var globalUpdateVisible = function(){
     for(var i = 0; i < HEXWIDTH; i++){
         for(var j = 0; j < HEXHEIGHT; j++){
             if((i%2) == (j%2)){
@@ -295,21 +816,23 @@ var updateVisible = function(){
         }
     }
     for(var i = 0; i < units.length; i++){
-        visibleDist = 2
         if(units[i].side !== yourSide) continue
-        console.log(hexArr[units[i].hexX][units[i].hexY])
-        if(hexArr[units[i].hexX][units[i].hexY].groundType == 'hill') visibleDist = 3
         var x = units[i].hexX
         var y = units[i].hexY
         startX = x-4
         startY = y-2
         for(var j = startX; j < startX+9; j++){
             for(var k = startY; k < startY+5; k++){
-                if((j%2 == k%2) && j >= 0 && k >= 0 && j < HEXWIDTH && k < HEXHEIGHT){    
-                    if(hexArr[j][k].visible) continue
-                    if(checkDist(x,y,j,k) <= visibleDist && canThisUnitSeeThisHex(x, y, j, k)){
+                if(j >= 0 && k >= 0 && j < HEXWIDTH && k < HEXHEIGHT && (j%2 == k%2)){
+                    if(checkDist(x,y,j,k) < 3){
                         hexArr[j][k].visible = true
                     }
+                } 
+                if(j >= 0 && k >= 0 && j < HEXWIDTH && k < HEXHEIGHT && (j%2 == k%2)){
+                    if(checkDist(x,y,j,k) < 3 && canThisUnitSeeThisHex(x, y, j, k)){
+                        hexArr[j][k].visible = true
+                    }
+                    
                 }
             }
         }
@@ -318,13 +841,13 @@ var updateVisible = function(){
         if(builds[i].side !== yourSide) continue
         var x = builds[i].hexX
         var y = builds[i].hexY
-        startX = x-6
+        startX = x-5
         startY = y-3
-        for(var j = startX; j < startX+13; j++){
+        for(var j = startX; j < startX+11; j++){
             for(var k = startY; k < startY+7; k++){
                 if(j >= 0 && k >= 0 && j < HEXWIDTH && k < HEXHEIGHT && (j%2 == k%2)){
-                    if(builds[i].type == 'C'){
-                        if(checkDist(x,y,j,k) < 4 && canThisUnitSeeThisHex(x, y, j, k)){
+                    if(builds[i].type == 'Castle'){
+                        if(checkDist(x,y,j,k) < 4){
                             hexArr[j][k].visible = true
                         }
                     }else{
@@ -336,6 +859,7 @@ var updateVisible = function(){
             }
         }
     }
+    
 }
 var createArrs = function(){
     for(var i = 0; i < HEXWIDTH; i++){
@@ -394,269 +918,32 @@ var drawHex = function(){
         }
     }
 }
-var getWoodCost = function(structureType){
-    switch(structureType){
-        case 'C':
-            return 50
-        case 'H':
-            return 10
-        default:
-            return 20
-
-    }
-}
-var buildStructure = function(){
-    builds.push({
-        id: builds.length,
-        type: whatBuildStructure,
-        side: yourSide,
-        active: false,
-        color: '#808080',
-        speed: 1,
-        x: buildStructureHexX*32+32,
-        y: buildStructureHexY*48+32,
-        hexX: buildStructureHexX,
-        hexY: buildStructureHexY,
-        makeUnit: false,
-        makeUnitType: null,
-        makeUnitTimeToEnd: null,
-        range: 3,
-        inCooldown: false,
-        cooldownAttack: null,
-        canAttack: true
-    })
-    if(yourSide == 'Blue' && blueIsVirgin){
-        blueIsVirgin = false
-    }
-    if(yourSide == 'Red' && redIsVirgin){
-        redIsVirgin = false
-    }
-    units[whatIsUnitIndex(activeHexX, activeHexY)].active = false
-    wood -= getWoodCost(whatBuildStructure)
-    activeType = null
-    activeHexX = -1
-    activeHexY = -1
-    updateVisible()
-    console.log('Обновляю инфу об игре')
-    socket.emit('updateInfoAboutGame', [0, units, builds, arrows])
-}
-var getSpeed = function(unitType){
-    switch(unitType){
-        case 'C':
-            return(4)
-        case 'A': 
-            return(2)
-        case 'P':
-            return(2)
-        case 'S':
-            return(3)
-        case 'R':
-            return(2)
-        case 'D':
-            return(4)
-        case 'W':
-            return(2)
-    }
-}
-var getRange = function(unitType){
-    switch(unitType){
-        case 'D':
-            return(3)
-        case 'A':
-            return(2)
-        case 'R':
-            return(3)
-    }
-}
-var getFoodCost = function(unitType){
-    switch(unitType){
-        case 'C':
-            return 20
-        case 'S':
-            return 15
-        case 'D':
-            return 20
-        case 'W':
-            return 5
-        default:
-            return 10
-    }
-}
-var buildUnit = function(){
-    console.log(buildUnitHexY, buildUnitHexY*48+32)
-    units.push({
-        id: units.length,
-        type: whatBuildUnit,
-        speed: getSpeed(whatBuildUnit),
-        range: getRange(whatBuildUnit),
-        color: '#4671D5',
-        active: false,
-        x: buildUnitHexX*32+32,
-        y: buildUnitHexY*48+32,
-        hexX: buildUnitHexX,
-        hexY: buildUnitHexY,
-        finalHexX: 1,
-        finalHexY: 3,
-        move: false,
-        direction: 'down-left',
-        stepToX: [],
-        stepToY: [],
-        globalToX: null,
-        globalToY: null,
-        side: yourSide,
-        inCooldown: false,
-        canMove: true,
-        cooldown: null,
-        progressRes: 0
-    })
-    builds[whatIsBuildIndex(activeHexX, activeHexY)].active = false
-    activeType = null
-    activeHexX = -1
-    activeHexY = -1
-    food -= getFoodCost(whatBuildUnit)
-    console.log(units)
-    updateVisible()
-    console.log('Обновляю инфу об игре')
-    socket.emit('updateInfoAboutGame', [0, units, builds, arrows])
-
-
-}
-var wantBuildUnit = function(unitType){
-    
-    console.log('Хочу построить ', unitType)
-    wantToBuildUnit = true
-    whatBuildUnit = unitType
-}
-var wantBuildStructure = function(structureType){
-    console.log('Хочу построить ', structureType)
-    wantToBuildStructure = true
-    whatBuildStructure = structureType
-
-} 
-var canBuild = function(toHexX, toHexY){
-    if(checkDist(activeHexX, activeHexY, toHexX, toHexY) == 1 && hexArr[toHexX][toHexY].groundType !== 'mountain' && !whatIsBuildIndex(toHexX, toHexY) && !whatIsUnitIndex(toHexX, toHexY)){
-        return true
-    }else{
-        return false
-    }
-}
-var clickOnMenu = function(x,y){
-    for(var i = 0; i < 12; i++){
-        if(x > 200+i*70 && x < 264+i*70){
-            switch(i){
-                case 0:
-                    if(canMakeBuild.includes('C')){
-                        wantBuildStructure('C')
-                    }
-                    break
-                case 1:
-                    if(canMakeBuild.includes('B')){
-                        wantBuildStructure('B')
-                    }
-                    break
-                case 2:
-                    if(canMakeBuild.includes('R')){
-                        wantBuildStructure('R')
-                    }
-                    break
-                case 3:
-                    if(canMakeBuild.includes('S')){
-                        wantBuildStructure('S')
-                    }
-                    break
-                case 4: 
-                    if(canMakeBuild.includes('H')){
-                        wantBuildStructure('H')
-                    }
-                    break
-                case 5:
-                    if(canMakeUnit.includes('C')){
-                        wantBuildUnit('C')
-                    }
-                    break
-                case 6:
-                    if(canMakeUnit.includes('A')){
-                        wantBuildUnit('A')
-                    }
-                    break
-                case 7:
-                    if(canMakeUnit.includes('P')){
-                        wantBuildUnit('P')
-                    }
-                    break
-                case 8:
-                    if(canMakeUnit.includes('S')){
-                        wantBuildUnit('S')
-                    }
-                    break
-                case 9:
-                    if(canMakeUnit.includes('R')){
-                        wantBuildUnit('R')
-                    }
-                    break
-                case 10:
-                    if(canMakeUnit.includes('D')){
-                        wantBuildUnit('D')
-                    }
-                    break
-                case 11:
-                    if(canMakeUnit.includes('W')){
-                        wantBuildUnit('W')
-                    }
-                    break
-                
-                
-            }
-
-            //Здесь надо вызвать функцию, которая строит здание или юнита
-        }
-    }
-}
-window.onmousemove = function(e){
-    if(e.clientY > 68){
-        currentMouseX = e.layerX
-        currentMouseY = e.layerY
-    }
-}
 window.onmousedown = function(e){
-    if(e.clientY < 68){
-        console.log('На менюшку тык')
-        clickOnMenu(e.layerX, e.layerY)
-        return
-    }
     if(this.mapEditor){
-       if(e.layerX > 1500 && e.layerX < 1564){
-           if(e.layerY > 148 && e.layerY < 212){
+       if(e.offsetX > 1500 && e.offsetX < 1564){
+           if(e.offsetY > 148 && e.offsetY < 212){
             this.currentEditorColor = 'rgb(147, 200, 83)'
             this.currentEditorColorName = 'plain'
-           }else if(e.layerY > 212 && e.layerY < 276){
+           }else if(e.offsetY > 212 && e.offsetY < 276){
             this.currentEditorColor = 'rgb(31, 116, 16)'
             this.currentEditorColorName = 'forest'
-           }else if(e.layerY > 276 && e.layerY < 340){
+           }else if(e.offsetY > 276 && e.offsetY < 340){
             this.currentEditorColor = 'rgb(255, 255, 130)'
             this.currentEditorColorName = 'beach'
-           }else if(e.layerY > 340 && e.layerY < 404){
+           }else if(e.offsetY > 340 && e.offsetY < 404){
             this.currentEditorColor = 'rgb(176, 129, 21)'
             this.currentEditorColorName = 'hill'
-           }else if(e.layerY > 404 && e.layerY < 468){
+           }else if(e.offsetY > 404 && e.offsetY < 468){
             this.currentEditorColor = 'rgb(105, 24, 4)'
             this.currentEditorColorName = 'mountain'
-           }else if(e.layerY > 468 && e.layerY < 532){
+           }else if(e.offsetY > 468 && e.offsetY < 532){
             this.currentEditorColor = 'rgb(0, 6, 104)'
             this.currentEditorColorName = 'water'
            }
        }
     }
-    XY = this.whatHexIsClicked(e.layerX, e.layerY)
-    if(wantToBuildStructure && canBuild(XY[0], XY[1])){
-        buildStructure()
-        return
-    }else if(wantToBuildUnit && canBuild(XY[0], XY[1])){
-        buildUnit()
-        return
-    }
-
-    doSomethingWithClick(XY)
+    
+    this.doSomethingWithClick(e.offsetX, e.offsetY)
     
 }
 var checkIsSimpleHex = function(x,y){
@@ -664,14 +951,16 @@ var checkIsSimpleHex = function(x,y){
         if(((y - i*48) > 16) && ((y - i*48) < 48)){
             col = Math.floor(x/32)
             row = Math.floor(y/48)
+            //whatHexIsClicked2(col,row)
             return [col,row]
         }
     }
     return false
 }
+
 var isCastleInThisHex = function(x,y){
     for(var i = 0; i < builds.length; i++){
-        if(builds[i].hexX === x && builds[i].hexY === y && builds[i].type == 'C'){
+        if(builds[i].hexX === x && builds[i].hexY === y && builds[i].type == 'Castle'){
             return true
         }
     }
@@ -685,7 +974,7 @@ var isEnemyInThisHex = function(x,y){
 }
 var isBuildsInThisHex = function(x,y){
     for(var i = 0; i < builds.length; i++){
-        if(builds[i].hexX === x && builds[i].hexY === y && builds[i].side == yourSide){
+        if(builds[i].hexX === x && builds[i].hexY === y){
             return true
         }
     }
@@ -714,7 +1003,6 @@ var castleAttack = function(currentHexX, currentHexY, x, y){
             falseHexX = x
             falseHexY = y
             timerFalseHex = TIMEFALSEHEX
-            console.log('TFH')
         }
     }else{
             activeType = null
@@ -737,7 +1025,6 @@ var meleeMoveOrAttack = function(currentHexX, currentHexY, x, y){
         falseHexX = x
         falseHexY = y
         timerFalseHex = TIMEFALSEHEX
-        console.log('TFH')
     }
     
     
@@ -769,7 +1056,7 @@ var createArrowAndShot = function(currentHexX, currentHexY, toHexX, toHexY, dist
     arrows[index].stepX = (arrows[index].speed/dist)*deltaStepX
     arrows[index].stepY = (arrows[index].speed/dist)*deltaStepY
 }
-var WMove = function(currentHexX, currentHexY, x, y){
+var workerMove = function(currentHexX, currentHexY, x, y){
     var dist = checkDist(currentHexX, currentHexY, x, y)
     var unitIndex = whatIsUnitIndex(currentHexX, currentHexY)
     if(canThisUnitGoToThisHex(currentHexX, currentHexY, x, y, dist) && !isEnemyInThisHex(x,y)){
@@ -777,7 +1064,6 @@ var WMove = function(currentHexX, currentHexY, x, y){
         activeType = null
         activeHexX = -1
         activeHexY = -1
-        console.log('Рабочий полетел')
         createMovePath(currentHexX, currentHexY, x, y, dist)
     }else{
         units[unitIndex].active = true
@@ -785,14 +1071,11 @@ var WMove = function(currentHexX, currentHexY, x, y){
         falseHexX = x
         falseHexY = y
         timerFalseHex = TIMEFALSEHEX
-        console.log('TFH')
     }
 }
 var rangerMoveOrAttack = function(currentHexX, currentHexY, x, y){
     var dist = checkDist(currentHexX, currentHexY, x, y)
     var unitIndex = whatIsUnitIndex(currentHexX, currentHexY)
-    console.log('RANGER WHY U NOT ATTACK')
-    console.log(dist , units[unitIndex].range)
     if(isEnemyInThisHex(x,y) && units[whatIsUnitIndex(x,y)].side !== yourSide && dist <= units[unitIndex].range && 600-units[unitIndex].cooldown >= 600/units[unitIndex].speed){
         units[unitIndex].active = false
         activeHexX = -1
@@ -821,14 +1104,13 @@ var rangerMoveOrAttack = function(currentHexX, currentHexY, x, y){
                 units[unitIndex].direction = 'down-right'
             }
         }
-        
         if(rangerCanAttack(currentHexX, currentHexY, x, y, dist, units[unitIndex].speed, units[unitIndex].direction, units[unitIndex].type)){
             units[unitIndex].inCooldown = true
             units[unitIndex].cooldown += (600/units[unitIndex].speed)
-            console.log('RANGER ATTACK')
-            if(units[unitIndex].type == 'A' || units[unitIndex].type == 'D'){
+            
+            if(units[unitIndex].type == 'Archer' || units[unitIndex].type == 'Dragoon'){
                 createArrowAndShot(currentHexX, currentHexY, x, y, dist, units[unitIndex].speed, 'justArrow')
-            } else if(units[unitIndex].type == 'R'){
+            } else if(units[unitIndex].type == 'Skirmisher'){
                 createArrowAndShot(currentHexX, currentHexY, x, y, dist, units[unitIndex].speed, 'dartArrow')
             }
         }
@@ -836,7 +1118,6 @@ var rangerMoveOrAttack = function(currentHexX, currentHexY, x, y){
             falseHexX = x
             falseHexY = y
             timerFalseHex = TIMEFALSEHEX
-            console.log('TFH')
         }
     }else if(canThisUnitGoToThisHex(currentHexX, currentHexY, x, y, dist)){
         
@@ -851,7 +1132,6 @@ var rangerMoveOrAttack = function(currentHexX, currentHexY, x, y){
         falseHexX = x
         falseHexY = y
         timerFalseHex = TIMEFALSEHEX
-        console.log('TFH')
     }
 
 
@@ -859,7 +1139,7 @@ var rangerMoveOrAttack = function(currentHexX, currentHexY, x, y){
 
 }
 var rangerCanAttack = function(currentHexX, currentHexY, toHexX, toHexY, dist, speed, dir, type){
-    deltaX = toHexX - currentHexX
+    /* deltaX = toHexX - currentHexX
     deltaY = toHexY - currentHexY
     console.log(deltaX, deltaY)
     if(dist == 2){
@@ -896,7 +1176,7 @@ var rangerCanAttack = function(currentHexX, currentHexY, toHexX, toHexY, dist, s
                     return false
                 }
             }
-            if(type != 'A'){
+            if(type != 'Archer'){
                 if(deltaX == 0){
                     if(hexArr[currentHexX-1][currentHexY+deltaY/2].groundType == 'hill' && hexArr[currentHexX+1][currentHexY+deltaY/2].groundType == 'hill'){
                         return false
@@ -937,10 +1217,51 @@ var rangerCanAttack = function(currentHexX, currentHexY, toHexX, toHexY, dist, s
     }else if(dist == 4){
 
     }
+    return true */
+
+    firstArrX = []
+    firstArrY = []
+    secondArrX = []
+    secondArrY = []
+    x = currentHexX*32+32
+    y = currentHexY*48+32
+    toX = toHexX*32+32
+    toY = toHexY*48+32
+    deltaX = (toX-x)/60
+    deltaY = (toY-y)/60/* 
+    XY = whatHexIsClicked(x,y)
+    hexX = XY[0]
+    hexY = XY[1]
+    if((hexX + hexY) % 2 === 1) hexX--
+    secondArrX.push(hexX)
+    secondArrY.push(hexY) */
+    for(var i = 1; i < 60; i++){
+        x+=deltaX
+        y+=deltaY
+        XY = whatHexIsClicked(x,y)
+        hexX = XY[0]
+        hexY = XY[1]
+        if((hexX + hexY) % 2 === 1) hexX--
+        if((hexX != secondArrX[secondArrX.length-1]) || (hexY != secondArrY[secondArrY.length-1])){
+            secondArrX.push(hexX)
+            secondArrY.push(hexY)
+        }
+    }
+    for(var i = 1; i < secondArrX.length-1; i++){
+        if(hexArr[secondArrX[i]][secondArrY[i]].groundType == 'forest'){
+            return false
+        }
+        if(hexArr[secondArrX[i]][secondArrY[i]].groundType == 'hill' && type != 'Archer'){
+            return false
+        }
+        for(var j = 0; j < builds.length; j++){
+            if(builds[j].hexX == secondArrX[i] && builds[j].hexY == secondArrY[i] && builds[j].type == 'Castle'){
+                return false
+            }
+        }
+    }
+
     return true
-
-
-
 
 
 
@@ -980,7 +1301,7 @@ var rangerCanAttack = function(currentHexX, currentHexY, toHexX, toHexY, dist, s
         tempArrowX += stepX
         tempArrowY += stepY
         for(var j = 0; j < builds.length; j++){
-            if(builds[j].x == Math.round(tempArrowX) && builds[j].y == Math.round(tempArrowY) && builds[j].type == 'C'){
+            if(builds[j].x == Math.round(tempArrowX) && builds[j].y == Math.round(tempArrowY) && builds[j].type == 'Castle'){
                 return false
             }
         }
@@ -1018,12 +1339,10 @@ var whatIsDirection = function(currentHexX, currentHexY, toHexX, toHexY){
     }
 }
 
-var doSomethingWithClick = function(arrXY){ 
-    console.log('0')
-    
+var doSomethingWithClick = function(clickX, clickY){
+    arrXY = whatHexIsClicked(clickX, clickY)
     x = arrXY[0]
     y = arrXY[1]
-    
     if((x + y) % 2 === 1) x--
     if(mapEditor){
 
@@ -1032,7 +1351,6 @@ var doSomethingWithClick = function(arrXY){
         return
     }
     if((activeHexX === x && activeHexY === y) || x < 0 || y < 0){
-        console.log('1')
         if(activeType === 'build'){
             builds[whatIsBuildIndex(activeHexX,activeHexY)].active = false
         }else if(activeType === 'unit'){
@@ -1044,7 +1362,6 @@ var doSomethingWithClick = function(arrXY){
         return
     }
     if(isUnitsInThisHex(x,y) && units[whatIsUnitIndex(x,y)].side === yourSide && units[whatIsUnitIndex(x,y)].canMove && units[whatIsUnitIndex(x,y)].move === false){
-        console.log('2')
         if(activeHexX !== -1){   
             if(activeType === 'build'){
                 builds[whatIsBuildIndex(activeHexX,activeHexY)].active = false
@@ -1058,7 +1375,6 @@ var doSomethingWithClick = function(arrXY){
         activeHexY = y
         
     }else if(isBuildsInThisHex(x,y) && builds[whatIsBuildIndex(x,y)].side === yourSide && (!builds[whatIsBuildIndex(x,y)].makeUnit || builds[whatIsBuildIndex(x,y)].canAttack)){
-        console.log('3')
         if(activeHexX !== -1){      
             if(activeType === 'build'){
                 builds[whatIsBuildIndex(activeHexX,activeHexY)].active = false
@@ -1072,44 +1388,100 @@ var doSomethingWithClick = function(arrXY){
         activeHexY = y
 
     }else if(activeHexX !== -1 && activeHexY !== -1 && !isUnitsInThisHex(x,y) && !isBuildsInThisHex(x,y)){
-        console.log('4')
           
         if(activeType === 'build'){
             builds[whatIsBuildIndex(activeHexX,activeHexY)].active = false            
-            if(builds[whatIsBuildIndex(activeHexX, activeHexY)].type === 'C'){
+            if(builds[whatIsBuildIndex(activeHexX, activeHexY)].type === 'Castle'){
                 castleAttack(activeHexX, activeHexY, x, y)
             }
             activeType = null
             activeHexX = -1
             activeHexY = -1
-            console.log('Обновляю инфу об игре')
-            socket.emit('updateInfoAboutGame', [0, units, builds, arrows])
         }else if(activeType === 'unit'){
-            console.log('moveunit')
             units[whatIsUnitIndex(activeHexX,activeHexY)].active = false
             activeType = null
-            if(units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'A' || units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'R' || units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'D'){
+            if(units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'Archer' || units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'Skirmisher' || units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'Dragoon'){
                 rangerMoveOrAttack(activeHexX, activeHexY, x, y)
-            }else if(units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'C' || units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'S' || units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'P'){
+            }else if(units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'Cavalery' || units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'Scout' || units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'Spear'){
                 meleeMoveOrAttack(activeHexX, activeHexY, x, y)
-            }else if(units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'W'){
-                WMove(activeHexX, activeHexY, x, y)
+            }else if(units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'Worker'){
+                workerMove(activeHexX, activeHexY, x, y)
             }
-            console.log('Обновляю инфу об игре')
-            socket.emit('updateInfoAboutGame', [0, units, builds, arrows])
         }
-    }else{
-        console.log('5')
     }
+}
+var whatHexIsClicked2 = function(x, y){
     
+    /* if((x + y) % 2 === 1) x--
+    if(mapEditor){
+
+        hexArr[x][y].groundType = currentEditorColorName
+        socket.emit('editMapInfo', hexArr)
+        return
+    }
+    if((activeHexX === x && activeHexY === y) || x < 0 || y < 0){
+        if(activeType === 'build'){
+            builds[whatIsBuildIndex(activeHexX,activeHexY)].active = false
+        }else if(activeType === 'unit'){
+            units[whatIsUnitIndex(activeHexX,activeHexY)].active = false
+        }
+        activeType = null   
+        activeHexX = -1
+        activeHexY = -1
+        return
+    }
+    if(isUnitsInThisHex(x,y) && units[whatIsUnitIndex(x,y)].side === yourSide && units[whatIsUnitIndex(x,y)].canMove && units[whatIsUnitIndex(x,y)].move === false){
+        if(activeHexX !== -1){   
+            if(activeType === 'build'){
+                builds[whatIsBuildIndex(activeHexX,activeHexY)].active = false
+            }else if(activeType === 'unit'){
+                units[whatIsUnitIndex(activeHexX,activeHexY)].active = false
+            }
+        }
+        units[whatIsUnitIndex(x,y)].active = true
+        activeType = 'unit'
+        activeHexX = x
+        activeHexY = y
+        
+    }else if(isBuildsInThisHex(x,y) && builds[whatIsBuildIndex(x,y)].side === yourSide && (!builds[whatIsBuildIndex(x,y)].makeUnit || builds[whatIsBuildIndex(x,y)].canAttack)){
+        if(activeHexX !== -1){      
+            if(activeType === 'build'){
+                builds[whatIsBuildIndex(activeHexX,activeHexY)].active = false
+            }else if(activeType === 'unit'){
+                units[whatIsUnitIndex(activeHexX,activeHexY)].active = false
+            }
+        }
+        builds[whatIsBuildIndex(x,y)].active = true
+        activeType = 'build'
+        activeHexX = x
+        activeHexY = y
+
+    }else if(activeHexX !== -1 && activeHexY !== -1 && !isUnitsInThisHex(x,y) && !isBuildsInThisHex(x,y)){
+          
+        if(activeType === 'build'){
+            builds[whatIsBuildIndex(activeHexX,activeHexY)].active = false            
+            if(builds[whatIsBuildIndex(activeHexX, activeHexY)].type === 'Castle'){
+                castleAttack(activeHexX, activeHexY, x, y)
+            }
+            activeType = null
+            activeHexX = -1
+            activeHexY = -1
+        }else if(activeType === 'unit'){
+            units[whatIsUnitIndex(activeHexX,activeHexY)].active = false
+            activeType = null
+            if(units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'Archer' || units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'Skirmisher' || units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'Dragoon'){
+                rangerMoveOrAttack(activeHexX, activeHexY, x, y)
+            }else if(units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'Cavalery' || units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'Scout' || units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'Spear'){
+                meleeMoveOrAttack(activeHexX, activeHexY, x, y)
+            }else if(units[whatIsUnitIndex(activeHexX, activeHexY)].type === 'Worker'){
+                workerMove(activeHexX, activeHexY, x, y)
+            }
+        }
+    } */
 }
 var whatHexIsClicked = function(x, y){
     if(checkIsSimpleHex(x,y)){
-        XY = checkIsSimpleHex(x,y)
-        col = XY[0]
-        row = XY[1]
-        if((col + row) % 2 === 1) col--
-        return [col,row]
+        return checkIsSimpleHex(x,y)
     }
     var row, col
     col = Math.floor(x/32)
@@ -1141,41 +1513,41 @@ var whatHexIsClicked = function(x, y){
         x = -(x)
         y = (-y)*2
         if(x > y){
-            if((col + row) % 2 === 1) col--
             return [col,row]
+            //whatHexIsClicked2(col, row)
         } else {
-            if((col + row) % 2 === 1) col--
-            return [col+1,row-1]
+            return [++col,--row]
+            whatHexIsClicked2(++col, --row)
         }
     }else if (dir === 1){ // 1 четверть
         x = 32 - x
         y = y * 2
         if(x > y){
-            if((col + row) % 2 === 1) col--
             return [col,row]
+            whatHexIsClicked2(col, row)
         } else {
-            if((col + row) % 2 === 1) col--
-            return [col+1,row+1]
+            return [++col,++row]
+            whatHexIsClicked2(++col, ++row)
         }
     }else if(dir === 3){  //3 четверть
         x = -(32 - x)
         y = (-y)*2
          if(x > y){
-            if((col + row) % 2 === 1) col--
             return [col,row]
+            whatHexIsClicked2(col, row)
         } else {
-            if((col + row) % 2 === 1) col--
-            return [col-1,row-1]
+            return [--col,--row]
+            whatHexIsClicked2(--col, --row)
         }
     }else if (dir === 4){ //4 четверть
         x = x
         y = y*2
          if(x > y){
-            if((col + row) % 2 === 1) col--
             return [col,row]
+            whatHexIsClicked2(col, row)
         } else {
-            if((col + row) % 2 === 1) col--
-            return [col-1,row+1]
+            return [--col,++row]
+            whatHexIsClicked2(--col, ++row)
         }
     }
 }
@@ -1197,21 +1569,21 @@ var checkDist = function(currentHexX, currentHexY, toHexX, toHexY){
 }
 var whatIsSpeed = function(hexX, hexY){
     for(var i = 0; i < units.length; i++){
-        if(hexX == units[i].hexX && hexY == units[i].hexY){
+        if(hexX === units[i].hexX && hexY === units[i].hexY){
             return units[i].speed
         }
     }
 }
 var whatIsBuildIndex = function(hexX, hexY){
     for(var i = 0; i < builds.length; i++){
-        if(hexX == builds[i].hexX && hexY == builds[i].hexY){
+        if(hexX === builds[i].hexX && hexY === builds[i].hexY){
             return i
         }
     }
 }
 var whatIsUnitIndex = function(hexX, hexY){
     for(var i = 0; i < units.length; i++){
-        if(hexX == units[i].hexX && hexY == units[i].hexY){
+        if(hexX === units[i].hexX && hexY === units[i].hexY){
             return i
         }
     }
@@ -1221,7 +1593,7 @@ var makeNewStepInThePath = function(currentX, currentY, toHexX, toHexY, currentA
     if(type == 'Range' || type == 'Melee'){
         unitIndex = whatIsUnitIndex(currentX, currentY)
         dist = checkDist(currentX, currentY, toHexX, toHexY)
-        //speed = units[unitIndex].speed
+        speed = units[unitIndex].speed
         countOfEnemy = 0
         
         tstartX = currentX
@@ -1421,18 +1793,17 @@ var canThisUnitSeeThisHex = function(unitX, unitY, hexX, hexY){
                 result = [arrPaths[i][0], arrPaths[i][1], arrPaths[i][j][0], arrPaths[i][j][1]]
                 currentDist = 2
                 break
-            }
-            
-                // for(var k = 2; k < 8; k++){
-                //     if(arrPaths[i][j][k][0] < 0 || arrPaths[i][j][k][1] < 0) continue
+            } 
+                for(var k = 2; k < 8; k++){
+                    if(arrPaths[i][j][k][0] < 0 || arrPaths[i][j][k][1] < 0) continue
                     
-                //     if(hexArr[arrPaths[i][j][k][0]][arrPaths[i][j][k][1]].groundType == 'water' || hexArr[arrPaths[i][j][k][0]][arrPaths[i][j][k][1]].groundType == 'mountain') continue
-                //     if(toHexX == arrPaths[i][j][k][0] && toHexY == arrPaths[i][j][k][1]){
-                //         result = [arrPaths[i][0], arrPaths[i][1], arrPaths[i][j][0], arrPaths[i][j][1], arrPaths[i][j][k][0], arrPaths[i][j][k][1]]
-                //         currentDist = 3
-                //         break
-                //     }
-                // }
+                    if(hexArr[arrPaths[i][j][k][0]][arrPaths[i][j][k][1]].groundType == 'water' || hexArr[arrPaths[i][j][k][0]][arrPaths[i][j][k][1]].groundType == 'mountain') continue
+                    if(toHexX == arrPaths[i][j][k][0] && toHexY == arrPaths[i][j][k][1]){
+                        result = [arrPaths[i][0], arrPaths[i][1], arrPaths[i][j][0], arrPaths[i][j][1], arrPaths[i][j][k][0], arrPaths[i][j][k][1]]
+                        currentDist = 3
+                        break
+                    }
+                }
             
             
         }
@@ -1453,7 +1824,7 @@ var canThisUnitGoToThisHex = function(currentHexX, currentHexY, toHexX, toHexY, 
         
     }else{
         for(var i = 0; i < units.length; i++){
-            if(units[i].globalToX == toHexX && units[i].globalToY == toHexY && units[i].side == yourSide){
+            if(units[i].globalToX == toHexX && units[i].globalToY == toHexY){
                 return false
             }
         }
@@ -1466,7 +1837,6 @@ var createMovePath = function(hexX, hexY, toHexX, toHexY, dist){
         falseHexX = toHexX
         falseHexY = toHexY
         timerFalseHex = TIMEFALSEHEX
-        console.log('TFH')
         return
     }
    
@@ -1479,13 +1849,13 @@ var createMovePath = function(hexX, hexY, toHexX, toHexY, dist){
     deltaX = toHexX - currentX
     deltaY = toHexY - currentY
     
-    if(units[whatIsUnitIndex(hexX, hexY)].type === 'A' || units[whatIsUnitIndex(hexX, hexY)].type === 'R' || units[whatIsUnitIndex(hexX, hexY)].type === 'D' || units[whatIsUnitIndex(hexX, hexY)].type === 'W'){
+    if(units[whatIsUnitIndex(hexX, hexY)].type === 'Archer' || units[whatIsUnitIndex(hexX, hexY)].type === 'Skirmisher' || units[whatIsUnitIndex(hexX, hexY)].type === 'Dragoon' || units[whatIsUnitIndex(hexX, hexY)].type === 'Worker'){
         arrPaths = makeNewStepInThePath(currentX, currentY, toHexX, toHexY, 0, 'Range')
         result = []
         currentDist = 999
         out: for(var i = 2; i < 8; i++){
             if(arrPaths[i][0] < 0 || arrPaths[i][1] < 0) continue
-            if((units[whatIsUnitIndex(hexX, hexY)].type === 'A' || units[whatIsUnitIndex(hexX, hexY)].type === 'R' || units[whatIsUnitIndex(hexX, hexY)].type === 'D' || units[whatIsUnitIndex(hexX, hexY)].type === 'W') && isEnemyInThisHex(arrPaths[i][0], arrPaths[i][1])) continue
+            if((units[whatIsUnitIndex(hexX, hexY)].type === 'Archer' || units[whatIsUnitIndex(hexX, hexY)].type === 'Skirmisher' || units[whatIsUnitIndex(hexX, hexY)].type === 'Dragoon' || units[whatIsUnitIndex(hexX, hexY)].type === 'Worker') && isEnemyInThisHex(arrPaths[i][0], arrPaths[i][1])) continue
             if(hexArr[arrPaths[i][0]][arrPaths[i][1]].groundType == 'water' || hexArr[arrPaths[i][0]][arrPaths[i][1]].groundType == 'mountain') continue
             if(toHexX == arrPaths[i][0] && toHexY == arrPaths[i][1] && currentDist > 1){
                 result = [arrPaths[i][0], arrPaths[i][1]]
@@ -1494,7 +1864,7 @@ var createMovePath = function(hexX, hexY, toHexX, toHexY, dist){
             }
             for(var j = 2; j < 8; j++){
                 if(arrPaths[i][j][0] < 0 || arrPaths[i][j][1] < 0) continue
-                if((units[whatIsUnitIndex(hexX, hexY)].type === 'A' || units[whatIsUnitIndex(hexX, hexY)].type === 'R' || units[whatIsUnitIndex(hexX, hexY)].type === 'D' || units[whatIsUnitIndex(hexX, hexY)].type === 'W') && isEnemyInThisHex(arrPaths[i][j][0], arrPaths[i][j][1])) continue
+                if((units[whatIsUnitIndex(hexX, hexY)].type === 'Archer' || units[whatIsUnitIndex(hexX, hexY)].type === 'Skirmisher' || units[whatIsUnitIndex(hexX, hexY)].type === 'Dragoon' || units[whatIsUnitIndex(hexX, hexY)].type === 'Worker') && isEnemyInThisHex(arrPaths[i][j][0], arrPaths[i][j][1])) continue
                 if(hexArr[arrPaths[i][j][0]][arrPaths[i][j][1]].groundType == 'water' || hexArr[arrPaths[i][j][0]][arrPaths[i][j][1]].groundType == 'mountain') continue
                 if(toHexX == arrPaths[i][j][0] && toHexY == arrPaths[i][j][1]  && currentDist > 2){
                     result = [arrPaths[i][0], arrPaths[i][1], arrPaths[i][j][0], arrPaths[i][j][1]]
@@ -1503,7 +1873,7 @@ var createMovePath = function(hexX, hexY, toHexX, toHexY, dist){
                 }
                 for(var k = 2; k < 8; k++){
                     if(arrPaths[i][j][k][0] < 0 || arrPaths[i][j][k][1] < 0) continue
-                    if((units[whatIsUnitIndex(hexX, hexY)].type === 'A' || units[whatIsUnitIndex(hexX, hexY)].type === 'R' || units[whatIsUnitIndex(hexX, hexY)].type === 'D' || units[whatIsUnitIndex(hexX, hexY)].type === 'W') && isEnemyInThisHex(arrPaths[i][j][k][0], arrPaths[i][j][k][1])) continue
+                    if((units[whatIsUnitIndex(hexX, hexY)].type === 'Archer' || units[whatIsUnitIndex(hexX, hexY)].type === 'Skirmisher' || units[whatIsUnitIndex(hexX, hexY)].type === 'Dragoon' || units[whatIsUnitIndex(hexX, hexY)].type === 'Worker') && isEnemyInThisHex(arrPaths[i][j][k][0], arrPaths[i][j][k][1])) continue
                     if(hexArr[arrPaths[i][j][k][0]][arrPaths[i][j][k][1]].groundType == 'water' || hexArr[arrPaths[i][j][k][0]][arrPaths[i][j][k][1]].groundType == 'mountain') continue
                     if(toHexX == arrPaths[i][j][k][0] && toHexY == arrPaths[i][j][k][1] && currentDist > 3){
                         result = [arrPaths[i][0], arrPaths[i][1], arrPaths[i][j][0], arrPaths[i][j][1], arrPaths[i][j][k][0], arrPaths[i][j][k][1]]
@@ -1512,7 +1882,7 @@ var createMovePath = function(hexX, hexY, toHexX, toHexY, dist){
                     }
                     for(var z = 2; z < 8; z++){
                         if(arrPaths[i][j][k][z][0] < 0 || arrPaths[i][j][k][z][1] < 0) continue
-                        if((units[whatIsUnitIndex(hexX, hexY)].type === 'A' || units[whatIsUnitIndex(hexX, hexY)].type === 'R' || units[whatIsUnitIndex(hexX, hexY)].type === 'D' || units[whatIsUnitIndex(hexX, hexY)].type === 'W') && isEnemyInThisHex(arrPaths[i][j][k][z][0], arrPaths[i][j][k][z][1])) continue
+                        if((units[whatIsUnitIndex(hexX, hexY)].type === 'Archer' || units[whatIsUnitIndex(hexX, hexY)].type === 'Skirmisher' || units[whatIsUnitIndex(hexX, hexY)].type === 'Dragoon' || units[whatIsUnitIndex(hexX, hexY)].type === 'Worker') && isEnemyInThisHex(arrPaths[i][j][k][z][0], arrPaths[i][j][k][z][1])) continue
                         if(hexArr[arrPaths[i][j][k][z][0]][arrPaths[i][j][k][z][1]].groundType == 'water' || hexArr[arrPaths[i][j][k][z][0]][arrPaths[i][j][k][z][1]].groundType == 'mountain') continue
                         if(toHexX == arrPaths[i][j][k][z][0] && toHexY == arrPaths[i][j][k][z][1] && currentDist > 4){
                             result = [arrPaths[i][0], arrPaths[i][1], arrPaths[i][j][0], arrPaths[i][j][1], arrPaths[i][j][k][0], arrPaths[i][j][k][1], arrPaths[i][j][k][z][0], arrPaths[i][j][k][z][1]]
@@ -1535,8 +1905,6 @@ var createMovePath = function(hexX, hexY, toHexX, toHexY, dist){
             falseHexX = toHexX
             falseHexY = toHexY
             timerFalseHex = TIMEFALSEHEX
-            console.log(countPower, dist)
-            console.log('TFH')
             return
         }
         result.unshift(0)
@@ -1544,7 +1912,7 @@ var createMovePath = function(hexX, hexY, toHexX, toHexY, dist){
         arrPaths.push(result)
         resultArrIndex = 0
 
-    }else if(units[whatIsUnitIndex(hexX, hexY)].type === 'C' || units[whatIsUnitIndex(hexX, hexY)].type === 'S' || units[whatIsUnitIndex(hexX, hexY)].type === 'P'){
+    }else if(units[whatIsUnitIndex(hexX, hexY)].type === 'Cavalery' || units[whatIsUnitIndex(hexX, hexY)].type === 'Scout' || units[whatIsUnitIndex(hexX, hexY)].type === 'Spear'){
         arrPaths = makeNewStepInThePath(currentX, currentY, toHexX, toHexY, 0, 'Melee')
         result = []
         currentDist = 999
@@ -1629,7 +1997,6 @@ var createMovePath = function(hexX, hexY, toHexX, toHexY, dist){
             falseHexX = toHexX
             falseHexY = toHexY
             timerFalseHex = TIMEFALSEHEX
-            console.log('TFH')
             return
         }
         result.unshift(0)
@@ -1663,7 +2030,6 @@ var createMovePath = function(hexX, hexY, toHexX, toHexY, dist){
         falseHexX = toHexX
         falseHexY = toHexY
         timerFalseHex = TIMEFALSEHEX
-        console.log('TFH')
     }
         
 }
@@ -1675,7 +2041,7 @@ var sentUnit = function(toHexX, toHexY, dist){
     units[unitIndex].direction = whatIsDirection(units[unitIndex].hexX, units[unitIndex].hexY, units[unitIndex].stepToX[0], units[unitIndex].stepToY[0])
 }
 
-var PEatEnemyIfCan = function(x, y){
+var SpearEatEnemyIfCan = function(x, y){
     for(var i = 0; i < units.length; i++){
         if(units[i].hexX == x && units[i].hexY == y && units[i].side != yourSide){
             fight(whatIsUnitIndex(x,y),i)
@@ -1685,18 +2051,17 @@ var PEatEnemyIfCan = function(x, y){
     }
 }
 var checkRangerInTheHill = function(unitIndex){
-    if(hexArr[units[unitIndex].hexX][units[unitIndex].hexY].groundType == 'hill' && units[unitIndex].type == 'A'){
+    if(hexArr[units[unitIndex].hexX][units[unitIndex].hexY].groundType == 'hill' && units[unitIndex].type == 'Archer'){
         units[unitIndex].range = 3
-    }else if(units[unitIndex].type == 'A'){
+    }else if(units[unitIndex].type == 'Archer'){
         units[unitIndex].range = 2
     }
 }
 var moveUnits = function(){
     for(var i = 0; i < units.length; i++){
         if(units[i].move){
-            if(units[i].type === 'P'){
-                if(PEatEnemyIfCan(units[i].stepToX[0], units[i].stepToY[0])){
-                    console.log(units[i])
+            if(units[i].type === 'Spear'){
+                if(SpearEatEnemyIfCan(units[i].stepToX[0], units[i].stepToY[0])){
                     if(units[i].stepToX.length == 1){ 
                         units[i].globalToX = units[i].hexX
                         units[i].globalToY = units[i].hexY
@@ -1711,24 +2076,20 @@ var moveUnits = function(){
             }
             var oneStepX, oneStepY
             if(Math.round(units[i].x) === units[i].stepToX[0]*32+32 && Math.round(units[i].y) === units[i].stepToY[0]*48+32){
-                
                 units[i].hexX = units[i].stepToX[0]
                 units[i].hexY = units[i].stepToY[0]
                 units[i].stepToX.shift()
                 units[i].stepToY.shift()
+                checkCollision(i)
+                globalUpdateVisible()
                 if(units[i].stepToX.length === 0){
                     checkRangerInTheHill(i)
                     units[i].move = false
                     units[i].inCooldown = true
-                    checkCollision(i)
-                    updateVisible()
+                    //checkCollision(i)
                     break
                 } 
                 units[i].direction = whatIsDirection(units[i].hexX, units[i].hexY, units[i].stepToX[0], units[i].stepToY[0])
-                checkCollision(i)
-                updateVisible()
-
-                
                 break
                 
                 
@@ -1758,7 +2119,7 @@ var checkCooldown = function(){
 }
 var fight = function(unitIndexAttack, unitIndexDefend, isArrow){
     if(isArrow){
-        if(unitIndexDefend == 'W' || unitIndexDefend == 'S'){
+        if(unitIndexDefend == 'Worker' || unitIndexDefend == 'Scout'){
             eatUnit(unitIndexDefend)
         }else{
             chance = 0.75
@@ -1816,16 +2177,16 @@ var getChanceToWin = function(typeAttack, attackerType, defenderType){
     
     if(typeAttack == 'back') chance += 0.5
     if(typeAttack == 'flank') chance += 0.25
-    if(defenderType == 'W') chance += 0.25
-    if(defenderType == 'D' && (attackerType == 'C' || attackerType == 'P')) chance += 0.5
-    if(defenderType == 'D' && attackerType == 'S') chance -= 0.25
-    if(attackerType == 'P' && defenderType == 'C') chance += 0.5
-    if(attackerType == 'C' && defenderType == 'P' && typeAttack == 'front') chance += -0.5
-    if(attackerType == 'C' && defenderType == 'P' && typeAttack == 'flank') chance += -0.25
-    if(attackerType == 'C' && defenderType == 'P' && typeAttack == 'back') chance += 0.5
-    if(attackerType == 'C' && defenderType == 'S') chance += 0.25
-    if(attackerType == 'S' && defenderType == 'C') chance += -0.25
-    if(defenderType == 'A' || defenderType == 'R') chance += 0.5
+    if(defenderType == 'Worker') chance += 0.25
+    if(defenderType == 'Dragoon' && (attackerType == 'Cavalery' || attackerType == 'Spear')) chance += 0.5
+    if(defenderType == 'Dragoon' && attackerType == 'Scout') chance -= 0.25
+    if(attackerType == 'Spear' && defenderType == 'Cavalery') chance += 0.5
+    if(attackerType == 'Cavalery' && defenderType == 'Spear' && typeAttack == 'front') chance += -0.5
+    if(attackerType == 'Cavalery' && defenderType == 'Spear' && typeAttack == 'flank') chance += -0.25
+    if(attackerType == 'Cavalery' && defenderType == 'Spear' && typeAttack == 'back') chance += 0.5
+    if(attackerType == 'Cavalery' && defenderType == 'Scout') chance += 0.25
+    if(attackerType == 'Scout' && defenderType == 'Cavalery') chance += -0.25
+    if(defenderType == 'Archer' || defenderType == 'Skirmisher') chance += 0.5
     if(chance > 1) chance = 1
     if(chance < 0) chance = 0
     return chance
@@ -1834,50 +2195,30 @@ var eatUnit = function(index){
     units.splice(index, 1)
 
 }
-var fightVsStructure = function(unit, structure){
-    if(builds[structure].type == 'C'){
-        builds.splice(structure, 1)
-        units.splice(unit, 1)
-    }else{
-        builds.splice(structure, 1)
-    }
-}
 var checkCollision = function(unitWhoEat){
-        for(var i = 0; i < units.length; i++){
-                if(units[unitWhoEat].hexX === units[i].hexX && units[unitWhoEat].hexY === units[i].hexY && !units[i].move && units[unitWhoEat].side !== units[i].side){
-                    console.log('Бой между ', unitWhoEat, i)
-                    console.log('До')
-                    console.log(units)
-                    fight(unitWhoEat, i)
-                    console.log('После')
-                    console.log(units)
+    for(var i = 0; i < units.length; i++){
+        for(var j = 0; j < units.length; j++){
+            if(unitWhoEat > -1){
+                if(units[unitWhoEat].hexX === units[j].hexX && units[unitWhoEat].hexY === units[j].hexY && !units[j].move && units[unitWhoEat].side !== units[j].side){
+                    fight(unitWhoEat,j)
                     //eatUnit(j)
                     return
                 }
-        }
-        for(var i = 0; i < builds.length; i++){
-            if(units[unitWhoEat].hexX === builds[i].hexX && units[unitWhoEat].hexY === builds[i].hexY &&  units[unitWhoEat].side !== builds[i].side){
-                fightVsStructure(unitWhoEat, i)
+            }
+            if(units[i].move){
+                if(i !== j && units[i].hexX === units[j].hexX && units[i].hexY === units[j].hexY && !units[j].move && units[i].side !== units[j].side){
+                    fight(unitWhoEat,j)
+                    //eatUnit(j)
+                    return
+            }
             }
         }
-            // if(units[i].move){
-            //     if(i !== j && units[i].hexX === units[j].hexX && units[i].hexY === units[j].hexY && !units[j].move && units[i].side !== units[j].side){
-            //         console.log('Бой между ', unitWhoEat, j)
-            //         console.log('До')
-            //         console.log(units)
-            //         fight(unitWhoEat,j)
-            //         console.log('После')
-            //         console.log(units)
-            //         //eatUnit(j)
-            //         return
-            // }
-            // }
-      
+    }
 }
 var renderBattery = function(){
     for(var i = 0; i < builds.length; i++){
         if(!hexArr[builds[i].hexX][builds[i].hexY].visible) continue
-        if(builds[i].type === 'C'){
+        if(builds[i].type === 'Castle'){
             var t = 600/builds[i].speed
             var countPower = builds[i].speed-Math.ceil(builds[i].cooldownAttack/t)
             var k = t/6
@@ -1960,33 +2301,27 @@ var renderBuilds = function(){
             }else{
                 builds[i].color = '#505050'
             }
-        }else if(builds[i].side == 'Red'){
-            if(builds[i].active){
-                builds[i].color = '#2671D5'
-            }else{
-                builds[i].color = '#502050'
-            }
-        }
             ctx.fillStyle = builds[i].color
             ctx.font = "bold 32px Courier"
             switch(builds[i].type){
-                case 'C':
+                case 'Castle':
                     ctx.fillText('C', builds[i].x-12, builds[i].y+12)
                     break
-                case 'B':
+                case 'Barrack':
                     ctx.fillText('B', builds[i].x-12, builds[i].y+12)
                     break
-                case 'R':
+                case 'RifleRange':
                     ctx.fillText('R', builds[i].x-12, builds[i].y+12)
                     break
-                case 'S':
+                case 'Stable':
                     ctx.fillText('S', builds[i].x-12, builds[i].y+12)
                     break
-                case 'H':
+                case 'House':
                     ctx.fillText('H', builds[i].x-12, builds[i].y+12)
                     break
             }
             /* ctx.fillRect(builds[i].x, builds[i].y, 8, 8) */
+        }
     }
     ctx.fillStyle = '#000000'
 }
@@ -2064,25 +2399,25 @@ var renderUnits = function(){
         /* ctx.fillRect(units[i].x, units[i].y, 8, 8) */
         ctx.font = "bold 32px Courier"
         switch(units[i].type){
-            case 'C':
+            case 'Cavalery':
                 ctx.fillText('C', units[i].x-12, units[i].y+12)
                 break
-            case 'A':
+            case 'Archer':
                 ctx.fillText('A', units[i].x-12, units[i].y+12)
                 break
-            case 'P':
+            case 'Spear':
                 ctx.fillText('P', units[i].x-12, units[i].y+12)
                 break
-            case 'S':
+            case 'Scout':
                 ctx.fillText('S', units[i].x-12, units[i].y+12)
                 break
-            case 'R':
+            case 'Skirmisher':
                 ctx.fillText('R', units[i].x-12, units[i].y+12)
                 break
-            case 'D':
+            case 'Dragoon':
                 ctx.fillText('D', units[i].x-12, units[i].y+12)
                 break
-            case 'W':
+            case 'Worker':
                 ctx.fillText('W', units[i].x-12, units[i].y+12)
                 break
         }
@@ -2090,258 +2425,31 @@ var renderUnits = function(){
     ctx.fillStyle = '#000000'
     
 }
-var updateInfoAboutBuild = function(){
-    if(whatIsUnitIndex(activeHexX, activeHexY) >= 0 && units[whatIsUnitIndex(activeHexX, activeHexY)].type == 'W'){
-        whatCanBuild()
-    }else if(whatIsBuildIndex(activeHexX, activeHexY) >= 0){
-        whatCanBuild()
-    }else{
-        wantToBuildStructure = false
-        whatBuildStructure = ''
-        buildStructureHexX = null
-        buildStructureHexY = null
-        canMakeBuild = []
-        wantToBuildUnit = false
-        whatBuildUnit = ''
-        buildUnitHexX = null
-        buildUnitHexY = null
-        canMakeUnit = []
-    }
-    
-}
-var whatCanBuild = function(){
-    canMakeUnit = []
-    canMakeBuild = []
-    console.log(activeType)
-    if(activeType == 'build'){
-        for(var i = 0; i < builds.length; i++){
-            
-            if(activeHexX == builds[i].hexX && activeHexY == builds[i].hexY){
-                if(builds[i].type == 'C'){
-                    if(food >= 20){
-                        canMakeUnit = ['C','A','P','S','R','D','W']
-                    }else if(food >= 15){
-                        canMakeUnit = ['A','P','S','R','W']
-                    }else if(food >= 10){
-                        canMakeUnit = ['A','P','R','W']
-                    }else if(food >= 5){
-                        canMakeUnit = ['W']
-                    }
-                }else if(builds[i].type == 'B'){
-                    if(food >= 15){
-                        canMakeUnit = ['P','S']
-                    }else if(food >= 10){
-                        canMakeUnit = ['P']
-                    }
-                }else if(builds[i].type == 'R'){
-                    if(food >= 20){
-                        canMakeUnit = ['A','R','D']
-                    }else if(food >= 10){
-                        canMakeUnit = ['A','R']
-                    }
-                }else if(builds[i].type == 'S' && food >= 20){
-                    canMakeUnit = ['C']
-                }else if(builds[i].type == 'H' && food >= 5){
-                    canMakeUnit = ['W']
-                }
-            }
-        }
-    }else if(activeType == 'unit'){
-        for(var i = 0; i < units.length; i++){
-            if(activeHexX == units[i].hexX && activeHexY == units[i].hexY){
-                if(units[i].type == 'W'){
-                    if(yourSide == 'Blue' && blueIsVirgin){
-                        canMakeBuild = ['C']
-                        return
-                    }
-                    if(yourSide == 'Red' && redIsVirgin){
-                        canMakeBuild = ['C']
-                        return
-                    }
-                    if(wood >= 50){
-                        canMakeBuild = ['C','B','R','S','H']
-                    }else if(wood >= 20){
-                        canMakeBuild = ['B','R','S','H']
-                    }else if(wood >= 10){
-                        canMakeBuild = ['H']
-                    }
-                }
-            }
-        }
-    }
-    
-}
-
-var renderMenu = function(){
-    menuctx.font = "bold 32px Courier"
-    menuctx.fillStyle = 'rgb(0, 0, 0)'
-    menuctx.fillText('Построить:', 8, 42)
-    charArr = ['C','B','R','S','H','C','A','P','S','R','D','W']
-    for(var i = 0; i < 5; i++){
-        menuctx.fillStyle = 'rgba(80, 80, 80, 0.2)'
-        menuctx.drawImage(forestHex, 200+i*70, 2)
-        for(var j = 0; j < canMakeBuild.length; j++){
-            if(charArr[i] == canMakeBuild[j]){
-                menuctx.fillStyle = 'rgba(80, 80, 80, 1)'
-            }
-        }
-        menuctx.fillText(charArr[i], 200+i*70+20, 42)
-    }
-    
-    if(yourSide == 'Blue'){
-        menuctx.fillStyle = 'rgba(27, 7, 106, 0.2)'
-    }else if(yourSide == 'Red'){
-        menuctx.fillStyle = 'rgba(159, 0, 19, 0.2)'
-    }
-    for(var i = 5; i < 12; i++){
-        menuctx.fillStyle = 'rgba(80, 80, 80, 0.2)'
-        menuctx.drawImage(plainHex, 200+i*70, 2)
-        for(var j = 0; j < canMakeUnit.length; j++){
-            if(charArr[i] == canMakeUnit[j]){
-                menuctx.fillStyle = 'rgba(80, 80, 80, 1)'
-            }
-        }
-        menuctx.fillText(charArr[i], 200+i*70+20, 42)
-    }
-    menuctx.fillStyle = '#A52A2A'
-    menuctx.fillText('Дерево', 1100, 42)
-    menuctx.fillStyle = '#008000'
-    menuctx.fillText('Еда', 1225, 42)
-    menuctx.fillStyle = '#ffd700 '
-    menuctx.fillText('Золото', 1300, 42)
-    menuctx.font = "bold 26px Courier"
-    menuctx.fillStyle = '#A52A2A'
-    menuctx.fillText(wood, 1135, 68)
-    menuctx.fillStyle = '#008000'
-    menuctx.fillText(food, 1235, 68)
-    menuctx.fillStyle = '#ffd700 '
-    menuctx.fillText(gold.toFixed(1), 1320, 68)
-}
-var renderBuildStuctureAndUnit = function(){
-    if(wantToBuildStructure || wantToBuildUnit){
-        for(var i = 0; i < 6; i++){
-            hexX = activeHexX
-            hexY = activeHexY
-            switch(i){
-                case 0:
-                    hexX -= 2
-                    break
-
-                case 1:
-                    hexX--
-                    hexY--
-                    break
-
-                case 2:
-                    hexX++
-                    hexY--
-                    break
-
-                case 3:
-                    hexX += 2
-                    break
-
-                case 4:
-                    hexX++
-                    hexY++
-                    break
-
-                case 5:
-                    hexX--
-                    hexY++
-                    break
-            }
-        
-        if(hexX < 0 || hexY < 0 || hexX > HEXWIDTH || hexY > HEXHEIGHT || whatIsBuildIndex(hexX, hexY) || whatIsUnitIndex(hexX, hexY)+1 || hexArr[hexX][hexY].groundType == 'mountain') continue
-        ctx.drawImage(canBuildHex, hexX*32, hexY*48)
-    }
-        if(wantToBuildStructure){
-            ctx.fillStyle = 'rgba(80, 80, 80, 1)'
-            XY = whatHexIsClicked(currentMouseX, currentMouseY)
-            buildStructureHexX = XY[0]
-            buildStructureHexY = XY[1]
-            if(buildStructureHexX >= HEXWIDTH || buildStructureHexY >= HEXHEIGHT || buildStructureHexX < 0 || buildStructureHexY < 0 || !hexArr[buildStructureHexX][buildStructureHexY].visible) return
-            ctx.fillText(whatBuildStructure, 20+buildStructureHexX*32, 44+buildStructureHexY*48)
-        
-        }
-        if(wantToBuildUnit){
-            XY = whatHexIsClicked(currentMouseX, currentMouseY)
-            buildUnitHexX = XY[0]
-            buildUnitHexY = XY[1]
-        }
-        
-        
-    }
-}
-var collectRes = function(){
-    for(var i = 0; i < units.length; i++){
-        if(units[i].type == 'W'){
-                gold += 1/600/24*5
-            if((hexArr[units[i].hexX][units[i].hexY].groundType == 'forest' || hexArr[units[i].hexX][units[i].hexY].groundType == 'beach')){
-                if(units[i].progressRes <= 16){
-                    units[i].progressRes += 1/60/24*16*5
-                }
-                
-            }else{
-                units[i].progressRes = 0
-            }
-            t = 600/units[i].speed
-            countPower = units[i].speed-Math.ceil(units[i].cooldown/t)
-            if(units[i].progressRes > 16 && countPower == 2){
-                
-                if(hexArr[units[i].hexX][units[i].hexY].groundType == 'forest'){
-                    wood += 1
-                }else if(hexArr[units[i].hexX][units[i].hexY].groundType == 'beach'){
-                    food += 1
-                } 
-                units[i].cooldown += 300
-                units[i].inCooldown = true
-                units[i].progressRes = 0
-            }
-        }
-    }
-}
-var renderCollectRes = function(){
-    for(var i = 0; i < units.length; i++){
-        if(!hexArr[units[i].hexX][units[i].hexY].visible) continue
-        if(units[i].progressRes > 0){
-            ctx.fillStyle = 'rgb(0, 255, 255)'
-            ctx.fillRect(units[i].x-24, units[i].y-4, 8, units[i].progressRes)
-        }
-    }
-}
 var startGame = function(){
     //createArrs()
     
-
+    
     //createHexArrs()
     createUnitsArr()
     createBuildsArr()
-    updateVisible()
+    globalUpdateVisible()
     mainLoop()
 }
 var mainLoop = function(){
     ctx.clearRect(0, 0, width, height)
-    menuctx.clearRect(0, 0, width, 84)
     
     if(mapEditor){
         renderEditButton()
     }
-    updateInfoAboutBuild()
     drawHex()
     moveAndCheckArrows()
     renderArrows()
     checkCooldown()
     //checkCollision()
-    collectRes()
-    renderCollectRes()
     moveUnits()
     renderUnits()
     renderBattery()
     renderBuilds()
-    renderMenu()
-    renderBuildStuctureAndUnit()
     checkFalseHex()
-
     requestAnimationFrame(mainLoop)
 }

@@ -20,13 +20,14 @@ roomsId = []
 // Массив со всеми играми, которые уже идут (внутри айдишники участников)
 gamesId = []
 // Массив с информацией о всех объектах
-gamesData = []
+gamesData = [] // [id,[units][builds][arrows]]
 // Массив с инфой о комнатах
 //[Название, Кол-во игроков, макс кол-во игроков, тип игры, карта, дата создания, хост]
 roomsData = [] 
 roomsDataAboutPlayers = []
 roomsDataAboutSockets = []
 hexArr = []
+
 lobbyesData = [] //[айдишник комнаты, хост или нет, имя, команда, цвет]
 // Функция, которая сработает при подключении к странице
 // Считается как новый пользователь
@@ -36,10 +37,19 @@ io.sockets.on('connection', function(socket) {
 	
 	file = fs.readFileSync('mapInfo.json')
 	hexArr = JSON.parse(file)
-	io.sockets.emit('loadPage', 'main')
+	io.sockets.emit('loadPage', 'title')
 	
 	socket.on('getMapInfo', function(){
 		socket.emit('setMapInfo', hexArr)
+	})
+	socket.on('getSide', function(){
+		console.log('Он хочет узнать свою сторону!')
+		for(var i = 0; i < roomsDataAboutSockets.length; i++){
+			for(var j = 1; j < roomsDataAboutSockets[i].length; j++){
+				socket.to(roomsDataAboutSockets[i][j].id).emit('setSide', j-1)
+			}
+		}
+		
 	})
 	socket.on('editMapInfo', function(newHexArr){
 		hexArr = newHexArr
@@ -48,9 +58,12 @@ io.sockets.on('connection', function(socket) {
 	})
 	// Добавление нового соединения в массив
 	connections.push(socket)
-
-	//socket.emit('loadPage', 'title')
-	socket.on('startGame', function(lobbyesInfo, roomsInfo){	
+	socket.on('updateInfoAboutGame', function(data){
+		console.log('updateInfoAboutGame')
+		gamesData = data
+		io.sockets.emit('sentInfoAboutGame', gamesData)
+	})
+	socket.on('startGame', function(lobbyesInfo, roomsInfo){
 		socket.emit('startGame')
 		socket.emit('loadPage','main')
 		for(var i = 0; i < roomsDataAboutSockets.length; i++){
@@ -62,8 +75,8 @@ io.sockets.on('connection', function(socket) {
 				}
 				roomsData.splice(i,1)
 				lobbyesData.splice(i,1)
-				roomsDataAboutSockets.splice(i,1)
-				roomsDataAboutPlayers.splice(i, 1)
+				// roomsDataAboutSockets.splice(i,1)
+				// roomsDataAboutPlayers.splice(i, 1)
 				io.sockets.emit('setRoomsData', roomsData, countGames)
 			}
 		}
