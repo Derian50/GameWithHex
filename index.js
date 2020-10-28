@@ -64,6 +64,7 @@ io.sockets.on('connection', function(socket) {
 		io.sockets.emit('sentInfoAboutGame', gamesData)
 	})
 	socket.on('startGame', function(lobbyesInfo, roomsInfo){
+		var destroyInfoAboutSockets = null
 		socket.emit('startGame')
 		socket.emit('loadPage','main')
 		for(var i = 0; i < roomsDataAboutSockets.length; i++){
@@ -73,18 +74,25 @@ io.sockets.on('connection', function(socket) {
 					socket.to(roomsDataAboutSockets[i][j].id).emit('startGame')
 					socket.to(roomsDataAboutSockets[i][j].id).emit('loadPage', 'main')
 				}
-				roomsData.splice(i,1)
-				lobbyesData.splice(i,1)
-				// roomsDataAboutSockets.splice(i,1)
-				// roomsDataAboutPlayers.splice(i, 1)
+				//roomsData.splice(i, 1)
+				//lobbyesData.splice(i, 1)
+				
 				io.sockets.emit('setRoomsData', roomsData, countGames)
+				destroyInfoAboutSockets = i
+				
+				//roomsDataAboutSockets.splice(destroyInfoAboutSockets, 1)
+				//roomsDataAboutPlayers.splice(destroyInfoAboutSockets, 1)
 			}
 		}
 	})
 	socket.on('getDataAboutPlayers', function(roomId){
 		for(var i = 0; i < roomsDataAboutPlayers.length; i++){
+			console.log(roomId, i, roomsData)
+			console.log(roomsDataAboutPlayers)
 			if(roomId == roomsData[i][0]){
+				console.log('emit')
 				socket.emit('setDataAboutPlayers', roomsDataAboutPlayers[i])
+				
 			}
 		}
 	})

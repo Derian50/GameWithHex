@@ -134,6 +134,7 @@ var createRandomNick = function(){
 }
 var setTeamsInfo = function(roomId){
     index = getRoomIndex(roomId)
+    console.log(roomsData, index, roomId)
     var count = howMuchCanBeTeams(roomsData[index])
     if(count > 10) count = 10
     
@@ -643,7 +644,6 @@ connectButton.onclick = function(){
         mainMenu.className = 'row d-none'
         lobbyPage.className = 'row'
 
-       // setTeamsInfo(selectedRoomId)
         createLobby()
     }
 }
@@ -668,7 +668,6 @@ var makeGame = function(){
     socket.emit('getLobbyesData', infoAboutGame[0])
     mainMenu.className = 'row d-none'
     lobbyPage.className = 'row'
-   // setTeamsInfo(infoAboutGame[0])
     createLobby()
 }
 
@@ -678,8 +677,13 @@ socket.on('setDataAboutPlayers', function(data){
 })
 socket.on('setLobbyesData', function(data){
     lobbyesData = data
+    console.log(data, infoAboutGame)
     createLobbyTable(lobbyesData)
-    setTeamsInfo(infoAboutGame[0])
+    if(!infoAboutGame[0]){
+        setTeamsInfo(infoAboutGame.id)
+    }else{
+        setTeamsInfo(infoAboutGame[0])
+    }
     for(var i = 0; i < roomsData.length; i++){
         if(lobbyesData[0][0] == roomsData[i][0]){
             checkStartGame(lobbyesData, roomsData[i])
